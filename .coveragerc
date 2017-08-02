@@ -1,0 +1,11 @@
+[run]
+branch = True
+source = pychrome
+
+[report]
+ignore_errors = True
+omit =
+    pychrome/cli.py
+    examples/*
+    tests/*
+    setup.py
