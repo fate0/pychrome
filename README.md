@@ -85,13 +85,13 @@ tab.Network.enable()
 # call method with timeout
 tab.Page.navigate(url="https://github.com/fate0/pychrome", _timeout=5)
 
-# 6. wait for loading
+# wait for loading
 tab.wait(5)
 
-# 7. stop tab (stop handle events and stop recv message from chrome)
+# stop tab (stop handle events and stop recv message from chrome)
 tab.stop()
 
-# 8. close tab
+# close tab
 browser.close_tab(tab)
 
 ```
