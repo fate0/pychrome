@@ -44,9 +44,9 @@ class GenericAttr(object):
 
 
 class Tab(object):
-    status_initial = 1
-    status_started = 2
-    status_stopped = 3
+    status_initial = 'initial'
+    status_started = 'started'
+    status_stopped = 'stopped'
 
     def __init__(self, **kwargs):
         self.id = kwargs.get("id")
