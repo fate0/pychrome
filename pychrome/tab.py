@@ -50,53 +50,51 @@ class Tab(object):
 
     def __init__(self, **kwargs):
         self.id = kwargs.get("id")
-        self.url = kwargs.get("url")
-        self.title = kwargs.get("title")
         self.type = kwargs.get("type")
-        self.websocket_url = kwargs.get("webSocketDebuggerUrl")
-        self.desc = kwargs.get("description")
 
-        self.origin_json = kwargs
+        self._websocket_url = kwargs.get("webSocketDebuggerUrl")
+        self._kwargs = kwargs
 
-        self.cur_id = 1000
-        self.event_handlers = {}
-        self.method_results = {}
-        self.event_queue = queue.Queue()
+        self._cur_id = 1000
 
-        self.ws = None
-        self.ws_send_lock = threading.Lock()
+        self._ws = None
+        self._ws_send_lock = threading.Lock()
 
-        self.recv_th = threading.Thread(target=self._recv_loop)
-        self.recv_th.daemon = True
-        self.handle_event_th = threading.Thread(target=self._handle_event_loop)
-        self.handle_event_th.daemon = True
+        self._recv_th = threading.Thread(target=self._recv_loop)
+        self._recv_th.daemon = True
+        self._handle_event_th = threading.Thread(target=self._handle_event_loop)
+        self._handle_event_th.daemon = True
 
         self._stopped = threading.Event()
         self._started = threading.Event()
+
+        self.event_handlers = {}
+        self.method_results = {}
+        self.event_queue = queue.Queue()
 
     def _init(self):
         if self._started.is_set():
             return
 
-        if not self.websocket_url:
+        if not self._websocket_url:
             raise RuntimeException("Already has another client connect to this tab")
 
         self._started.set()
         self._stopped.clear()
-        self.ws = websocket.create_connection(self.websocket_url)
-        self.recv_th.start()
-        self.handle_event_th.start()
+        self._ws = websocket.create_connection(self._websocket_url)
+        self._recv_th.start()
+        self._handle_event_th.start()
 
     def _send(self, message, timeout=None):
         if 'id' not in message:
-            self.cur_id += 1
-            message['id'] = self.cur_id
+            self._cur_id += 1
+            message['id'] = self._cur_id
 
         logger.debug("[*] send message: %s %s" % (message["id"], message['method']))
         self.method_results[message['id']] = queue.Queue()
 
-        with self.ws_send_lock:
-            self.ws.send(json.dumps(message))
+        with self._ws_send_lock:
+            self._ws.send(json.dumps(message))
 
         if not isinstance(timeout, (int, float)) or timeout > 1:
             q_timeout = 1
@@ -126,8 +124,8 @@ class Tab(object):
     def _recv_loop(self):
         while not self._stopped.is_set():
             try:
-                self.ws.settimeout(1)
-                message = json.loads(self.ws.recv())
+                self._ws.settimeout(1)
+                message = json.loads(self._ws.recv())
             except websocket.WebSocketTimeoutException:
                 continue
             except (websocket.WebSocketConnectionClosedException, OSError):
@@ -216,7 +214,7 @@ class Tab(object):
         logger.debug("[*] stop tab %s" % self.id)
 
         self._stopped.set()
-        self.ws.close()
+        self._ws.close()
 
     def wait(self, timeout=None):
         self._init()

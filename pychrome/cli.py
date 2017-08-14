@@ -28,7 +28,7 @@ def add_shared_options(func):
 class JSONTabEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, pychrome.Tab):
-            return obj.origin_json
+            return obj._kwargs
 
         return super(JSONTabEncoder, self).default(self, obj)
 
