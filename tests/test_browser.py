@@ -63,11 +63,6 @@ def test_browser_activate_tab():
         browser.activate_tab(tab)
 
 
-def test_browser_str():
-    browser = pychrome.Browser()
-    assert str(browser) == '<Browser %s>' % browser.dev_url
-
-
 def test_browser_tabs_map():
     browser = pychrome.Browser()
 

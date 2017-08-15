@@ -285,9 +285,3 @@ def test_callback_exception():
 
     if tab.wait(timeout=3):
         assert False, "never get here"
-
-
-def test_tab_str():
-    browser = pychrome.Browser()
-    tab = browser.new_tab()
-    assert str(tab) == '<Tab [%s] %s>' % (tab.id, tab.url)
