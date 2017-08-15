@@ -68,6 +68,8 @@ class Tab(object):
         self._stopped = threading.Event()
         self._started = threading.Event()
 
+        self.debug = False
+
         self.event_handlers = {}
         self.method_results = {}
         self.event_queue = queue.Queue()
@@ -93,8 +95,12 @@ class Tab(object):
         logger.debug("[*] send message: %s %s" % (message["id"], message['method']))
         self.method_results[message['id']] = queue.Queue()
 
+        message_json = json.dumps(message)
+        if self.debug:
+            print('> %s' % message)
+
         with self._ws_send_lock:
-            self._ws.send(json.dumps(message))
+            self._ws.send(message_json)
 
         if not isinstance(timeout, (int, float)) or timeout > 1:
             q_timeout = 1
@@ -125,11 +131,15 @@ class Tab(object):
         while not self._stopped.is_set():
             try:
                 self._ws.settimeout(1)
-                message = json.loads(self._ws.recv())
+                message_json = self._ws.recv()
+                message = json.loads(message_json)
             except websocket.WebSocketTimeoutException:
                 continue
             except (websocket.WebSocketConnectionClosedException, OSError):
                 return
+
+            if self.debug:
+                print('< %s' % message_json)
 
             if "method" in message:
                 logger.debug("[*] recv event: %s" % message["method"])
@@ -221,6 +231,6 @@ class Tab(object):
         return self._stopped.wait(timeout)
 
     def __str__(self):
-        return "<Tab [%s] %s>" % (self.id, self.url)
+        return "<Tab [%s]>" % self.id
 
     __repr__ = __str__
