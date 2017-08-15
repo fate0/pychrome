@@ -4,6 +4,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 .DS_Store
+site/
 
 # C extensions
 *.so
