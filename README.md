@@ -1,7 +1,7 @@
 # pychrome
 
 [![Build Status](https://travis-ci.org/fate0/pychrome.svg?branch=master)](https://travis-ci.org/fate0/pychrome)
-[![Codecov](https://img.shields.io/codecov/c/github/codecov/example-python.svg)](https://codecov.io/gh/fate0/pychrome)
+[![Codecov](https://img.shields.io/codecov/c/github/fate0/pychrome.svg)](https://codecov.io/gh/fate0/pychrome)
 [![Updates](https://pyup.io/repos/github/fate0/pychrome/shield.svg)](https://pyup.io/repos/github/fate0/pychrome/)
 [![PyPI](https://img.shields.io/pypi/v/pychrome.svg)](https://pypi.python.org/pypi/pychrome)
 [![PyPI](https://img.shields.io/pypi/pyversions/pychrome.svg)](https://github.com/fate0/pychrome)
