@@ -1,0 +1,49 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "pychrome\n\n\n\n\n\n\n\n\n\n\n\n\nA Python Package for the Google Chrome Dev Protocol\n\n\nTable of Contents\n\n\n\n\nInstallation\n\n\nSetup Chrome\n\n\nGetting Started\n\n\nTab management\n\n\nExamples\n\n\nRef\n\n\n\n\nInstallation\n\n\nTo install pychrome, simply:\n\n\n$ pip install -U git+https://github.com/fate0/pychrome.git\n\n\n\n\nor from pypi:\n\n\n$ pip install -U pychrome\n\n\n\n\nor from source:\n\n\n$ python setup.py install\n\n\n\n\nSetup Chrome\n\n\nsimply:\n\n\n$ google-chrome --remote-debugging-port=9222\n\n\n\n\nor headless mode (chrome version >= 59):\n\n\n$ google-chrome --headless --disable-gpu --remote-debugging-port=9222\n\n\n\n\nor use docker:\n\n\n$ docker pull fate0/headless-chrome\n$ docker run -it --rm --cap-add=SYS_ADMIN -p9222:9222 fate0/headless-chrome\n\n\n\n\nGetting Started\n\n\n# create a browser instance\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\n# list all tabs (default has a blank tab)\ntabs = browser.list_tab()\n\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\n# register callback if you want\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\ntab.Network.requestWillBeSent = request_will_be_sent\n\n# call method\ntab.Network.enable()\n# call method with timeout\ntab.Page.navigate(url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\n# wait for loading\ntab.wait(5)\n\n# stop tab (stop handle events and stop recv message from chrome)\ntab.stop()\n\n# close tab\nbrowser.close_tab(tab)\n\n\n\n\n\nor (alternate syntax)\n\n\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\ntabs = browser.list_tab()\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\n\ntab.set_listener(\"Network.requestWillBeSent\", request_will_be_sent)\n\ntab.call_method(\"Network.enable\")\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\ntab.wait(5)\ntab.stop()\n\nbrowser.close_tab(tab)\n\n\n\n\nmore methods or events could be found in\n\nChrome DevTools Protocol\n\n\nTab management\n\n\nrun \npychrome -h\n for more info\n\n\nexample:\n\n\n$ pychrome new http://www.fatezero.org\n{\n    \"description\": \"\",\n    \"url\": \"http://www.fatezero.org/\",\n    \"webSocketDebuggerUrl\": \"ws://127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"id\": \"557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"type\": \"page\",\n    \"devtoolsFrontendUrl\": \"/devtools/inspector.html?ws=127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"title\": \"\"\n}\n\n$ pychrome close 557d8315-e909-466c-bf20-f5a6133ebd89\nTarget is closing\n\n\n\n\nExamples\n\n\nplease see the \nexamples\n directory for more examples\n\n\nRef\n\n\n\n\nchrome-remote-interface\n\n\nChrome DevTools Protocol",
+            "title": "Home"
+        },
+        {
+            "location": "/#pychrome",
+            "text": "A Python Package for the Google Chrome Dev Protocol",
+            "title": "pychrome"
+        },
+        {
+            "location": "/#table-of-contents",
+            "text": "Installation  Setup Chrome  Getting Started  Tab management  Examples  Ref",
+            "title": "Table of Contents"
+        },
+        {
+            "location": "/#installation",
+            "text": "To install pychrome, simply:  $ pip install -U git+https://github.com/fate0/pychrome.git  or from pypi:  $ pip install -U pychrome  or from source:  $ python setup.py install",
+            "title": "Installation"
+        },
+        {
+            "location": "/#setup-chrome",
+            "text": "simply:  $ google-chrome --remote-debugging-port=9222  or headless mode (chrome version >= 59):  $ google-chrome --headless --disable-gpu --remote-debugging-port=9222  or use docker:  $ docker pull fate0/headless-chrome\n$ docker run -it --rm --cap-add=SYS_ADMIN -p9222:9222 fate0/headless-chrome",
+            "title": "Setup Chrome"
+        },
+        {
+            "location": "/#getting-started",
+            "text": "# create a browser instance\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\n# list all tabs (default has a blank tab)\ntabs = browser.list_tab()\n\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\n# register callback if you want\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\ntab.Network.requestWillBeSent = request_will_be_sent\n\n# call method\ntab.Network.enable()\n# call method with timeout\ntab.Page.navigate(url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\n# wait for loading\ntab.wait(5)\n\n# stop tab (stop handle events and stop recv message from chrome)\ntab.stop()\n\n# close tab\nbrowser.close_tab(tab)  or (alternate syntax)  browser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\ntabs = browser.list_tab()\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\n\ntab.set_listener(\"Network.requestWillBeSent\", request_will_be_sent)\n\ntab.call_method(\"Network.enable\")\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\ntab.wait(5)\ntab.stop()\n\nbrowser.close_tab(tab)  more methods or events could be found in Chrome DevTools Protocol",
+            "title": "Getting Started"
+        },
+        {
+            "location": "/#tab-management",
+            "text": "run  pychrome -h  for more info  example:  $ pychrome new http://www.fatezero.org\n{\n    \"description\": \"\",\n    \"url\": \"http://www.fatezero.org/\",\n    \"webSocketDebuggerUrl\": \"ws://127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"id\": \"557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"type\": \"page\",\n    \"devtoolsFrontendUrl\": \"/devtools/inspector.html?ws=127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"title\": \"\"\n}\n\n$ pychrome close 557d8315-e909-466c-bf20-f5a6133ebd89\nTarget is closing",
+            "title": "Tab management"
+        },
+        {
+            "location": "/#examples",
+            "text": "please see the  examples  directory for more examples",
+            "title": "Examples"
+        },
+        {
+            "location": "/#ref",
+            "text": "chrome-remote-interface  Chrome DevTools Protocol",
+            "title": "Ref"
+        }
+    ]
+}

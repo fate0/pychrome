@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  <meta name="author" content="fate0">
+  <link rel="shortcut icon" href="./img/favicon.ico">
+  <title>Home - pychrome</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> pychrome</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Home</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#pychrome">pychrome</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#table-of-contents">Table of Contents</a></li>
+        
+            <li><a class="toctree-l3" href="#installation">Installation</a></li>
+        
+            <li><a class="toctree-l3" href="#setup-chrome">Setup Chrome</a></li>
+        
+            <li><a class="toctree-l3" href="#getting-started">Getting Started</a></li>
+        
+            <li><a class="toctree-l3" href="#tab-management">Tab management</a></li>
+        
+            <li><a class="toctree-l3" href="#examples">Examples</a></li>
+        
+            <li><a class="toctree-l3" href="#ref">Ref</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">pychrome</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fate0/pychrome/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="pychrome">pychrome</h1>
+<p><a href="https://travis-ci.org/fate0/pychrome"><img alt="Build Status" src="https://travis-ci.org/fate0/pychrome.svg?branch=master" /></a>
+<a href="https://codecov.io/gh/fate0/pychrome"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/fate0/pychrome.svg" /></a>
+<a href="https://pyup.io/repos/github/fate0/pychrome/"><img alt="Updates" src="https://pyup.io/repos/github/fate0/pychrome/shield.svg" /></a>
+<a href="https://pypi.python.org/pypi/pychrome"><img alt="PyPI" src="https://img.shields.io/pypi/v/pychrome.svg" /></a>
+<a href="https://github.com/fate0/pychrome"><img alt="PyPI" src="https://img.shields.io/pypi/pyversions/pychrome.svg" /></a></p>
+<p>A Python Package for the Google Chrome Dev Protocol</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#setup-chrome">Setup Chrome</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#tab-management">Tab management</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#ref">Ref</a></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>To install pychrome, simply:</p>
+<pre><code>$ pip install -U git+https://github.com/fate0/pychrome.git
+</code></pre>
+
+<p>or from pypi:</p>
+<pre><code>$ pip install -U pychrome
+</code></pre>
+
+<p>or from source:</p>
+<pre><code>$ python setup.py install
+</code></pre>
+
+<h2 id="setup-chrome">Setup Chrome</h2>
+<p>simply:</p>
+<pre><code>$ google-chrome --remote-debugging-port=9222
+</code></pre>
+
+<p>or headless mode (chrome version &gt;= 59):</p>
+<pre><code>$ google-chrome --headless --disable-gpu --remote-debugging-port=9222
+</code></pre>
+
+<p>or use docker:</p>
+<pre><code>$ docker pull fate0/headless-chrome
+$ docker run -it --rm --cap-add=SYS_ADMIN -p9222:9222 fate0/headless-chrome
+</code></pre>
+
+<h2 id="getting-started">Getting Started</h2>
+<pre><code class="python"># create a browser instance
+browser = pychrome.Browser(url=&quot;http://127.0.0.1:9222&quot;)
+
+# list all tabs (default has a blank tab)
+tabs = browser.list_tab()
+
+if not tabs:
+    tab = browser.new_tab()
+else:
+    tab = tabs[0]
+
+
+# register callback if you want
+def request_will_be_sent(**kwargs):
+    print(&quot;loading: %s&quot; % kwargs.get('request').get('url'))
+
+tab.Network.requestWillBeSent = request_will_be_sent
+
+# call method
+tab.Network.enable()
+# call method with timeout
+tab.Page.navigate(url=&quot;https://github.com/fate0/pychrome&quot;, _timeout=5)
+
+# wait for loading
+tab.wait(5)
+
+# stop tab (stop handle events and stop recv message from chrome)
+tab.stop()
+
+# close tab
+browser.close_tab(tab)
+
+</code></pre>
+
+<p>or (alternate syntax)</p>
+<pre><code class="python">browser = pychrome.Browser(url=&quot;http://127.0.0.1:9222&quot;)
+
+tabs = browser.list_tab()
+if not tabs:
+    tab = browser.new_tab()
+else:
+    tab = tabs[0]
+
+
+def request_will_be_sent(**kwargs):
+    print(&quot;loading: %s&quot; % kwargs.get('request').get('url'))
+
+
+tab.set_listener(&quot;Network.requestWillBeSent&quot;, request_will_be_sent)
+
+tab.call_method(&quot;Network.enable&quot;)
+tab.call_method(&quot;Page.navigate&quot;, url=&quot;https://github.com/fate0/pychrome&quot;, _timeout=5)
+
+tab.wait(5)
+tab.stop()
+
+browser.close_tab(tab)
+</code></pre>
+
+<p>more methods or events could be found in
+<a href="https://chromedevtools.github.io/devtools-protocol/tot/">Chrome DevTools Protocol</a></p>
+<h2 id="tab-management">Tab management</h2>
+<p>run <code>pychrome -h</code> for more info</p>
+<p>example:</p>
+<pre><code>$ pychrome new http://www.fatezero.org
+{
+    &quot;description&quot;: &quot;&quot;,
+    &quot;url&quot;: &quot;http://www.fatezero.org/&quot;,
+    &quot;webSocketDebuggerUrl&quot;: &quot;ws://127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89&quot;,
+    &quot;id&quot;: &quot;557d8315-e909-466c-bf20-f5a6133ebd89&quot;,
+    &quot;type&quot;: &quot;page&quot;,
+    &quot;devtoolsFrontendUrl&quot;: &quot;/devtools/inspector.html?ws=127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89&quot;,
+    &quot;title&quot;: &quot;&quot;
+}
+
+$ pychrome close 557d8315-e909-466c-bf20-f5a6133ebd89
+Target is closing
+</code></pre>
+
+<h2 id="examples">Examples</h2>
+<p>please see the <a href="http://github.com/fate0/pychrome/blob/master/examples">examples</a> directory for more examples</p>
+<h2 id="ref">Ref</h2>
+<ul>
+<li><a href="https://github.com/cyrus-and/chrome-remote-interface/">chrome-remote-interface</a></li>
+<li><a href="https://chromedevtools.github.io/devtools-protocol/tot/">Chrome DevTools Protocol</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/fate0/pychrome" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+      
+    </span>
+</div>
+    <script src="./js/theme.js"></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.16.3
+Build Date UTC : 2017-08-15 14:36:25
+-->
