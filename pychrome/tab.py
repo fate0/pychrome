@@ -92,12 +92,9 @@ class Tab(object):
             self._cur_id += 1
             message['id'] = self._cur_id
 
-        logger.debug("[*] send message: %s %s" % (message["id"], message['method']))
         self.method_results[message['id']] = queue.Queue()
-
         message_json = json.dumps(message)
-        if self.debug:
-            print('> %s' % message)
+        logger.debug("SEND ► %s" % message_json)
 
         with self._ws_send_lock:
             self._ws.send(message_json)
@@ -138,19 +135,16 @@ class Tab(object):
             except (websocket.WebSocketConnectionClosedException, OSError):
                 return
 
-            if self.debug:
-                print('< %s' % message_json)
+            logger.debug('◀ RECV %s' % message_json)
 
             if "method" in message:
-                logger.debug("[*] recv event: %s" % message["method"])
                 self.event_queue.put(message)
 
             elif "id" in message:
-                logger.debug("[*] recv message: %s" % message["id"])
                 if message["id"] in self.method_results:
                     self.method_results[message['id']].put(message)
             else:
-                logger.warning("[-] unknown message: %s" % message)
+                warnings.warn("unknown message: %s" % message)
 
     def _handle_event_loop(self):
         while not self._stopped.is_set():
@@ -163,7 +157,6 @@ class Tab(object):
                 try:
                     self.event_handlers[event['method']](**event['params'])
                 except Exception as e:
-                    logger.error("[-] callback %s error: %s" % (event['method'], str(e)))
                     warnings.warn("callback %s error: %s" % (event['method'], str(e)))
 
     def __getattr__(self, item):
@@ -182,7 +175,7 @@ class Tab(object):
         timeout = kwargs.pop("_timeout", None)
         result = self._send({"method": _method, "params": kwargs}, timeout=timeout)
         if 'result' not in result and 'error' in result:
-            logger.error("[-] %s error: %s" % (_method, result['error']['message']))
+            warnings.warn("%s error: %s" % (_method, result['error']['message']))
             raise CallMethodException("calling method: %s error: %s" % (_method, result['error']['message']))
 
         return result['result']
@@ -220,8 +213,6 @@ class Tab(object):
 
         if not self._started.is_set():
             raise RuntimeException("Tab is not running")
-
-        logger.debug("[*] stop tab %s" % self.id)
 
         self._stopped.set()
         self._ws.close()

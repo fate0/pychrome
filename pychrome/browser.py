@@ -3,7 +3,6 @@
 
 from __future__ import unicode_literals
 
-import logging
 import requests
 
 from pychrome.tab import Tab
@@ -15,9 +14,6 @@ except ImportError:
 
 
 __all__ = ["Browser"]
-
-
-logger = logging.getLogger(__name__)
 
 
 class Browser(object):
