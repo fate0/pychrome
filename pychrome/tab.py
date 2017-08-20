@@ -61,9 +61,7 @@ class Tab(object):
         self._ws_send_lock = threading.Lock()
 
         self._recv_th = threading.Thread(target=self._recv_loop)
-        self._recv_th.daemon = True
         self._handle_event_th = threading.Thread(target=self._handle_event_loop)
-        self._handle_event_th.daemon = True
 
         self._stopped = threading.Event()
         self._started = threading.Event()

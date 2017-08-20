@@ -60,8 +60,11 @@ class Browser(object):
         if isinstance(tab_id, Tab):
             tab_id = tab_id.id
 
+        tab = self._tabs.pop(tab_id, None)
+        if tab and tab.status() == Tab.status_started:
+            tab.stop()
+
         rp = requests.get("%s/json/close/%s" % (self.dev_url, tab_id), timeout=timeout)
-        self._tabs.pop(tab_id, None)
         return rp.text
 
     def version(self, timeout=None):
