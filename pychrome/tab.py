@@ -66,8 +66,6 @@ class Tab(object):
         self._stopped = threading.Event()
         self._started = threading.Event()
 
-        self.debug = False
-
         self.event_handlers = {}
         self.method_results = {}
         self.event_queue = queue.Queue()
