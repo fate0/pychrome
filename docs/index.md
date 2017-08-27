@@ -6,16 +6,7 @@
 [![PyPI](https://img.shields.io/pypi/v/pychrome.svg)](https://pypi.python.org/pypi/pychrome)
 [![PyPI](https://img.shields.io/pypi/pyversions/pychrome.svg)](https://github.com/fate0/pychrome)
 
-A Python Package for the Google Chrome Dev Protocol
-
-## Table of Contents
-
-* [Installation](#installation)
-* [Setup Chrome](#setup-chrome)
-* [Getting Started](#getting-started)
-* [Tab management](#tab-management)
-* [Examples](#examples)
-* [Ref](#ref)
+A Python Package for the Google Chrome Dev Protocol, [more document](https://fate0.github.io/pychrome/)
 
 
 ## Installation
@@ -131,26 +122,21 @@ more methods or events could be found in
 [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/tot/)
 
 
+## Debug
+
+set DEBUG env variable:
+
+![pychrome_with_debug_env](https://raw.githubusercontent.com/fate0/pychrome/master/docs/images/pychrome_with_debug_env.png)
+
+
 ## Tab management
 
 run `pychrome -h` for more info
 
 example:
-```
-$ pychrome new http://www.fatezero.org
-{
-    "description": "",
-    "url": "http://www.fatezero.org/",
-    "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89",
-    "id": "557d8315-e909-466c-bf20-f5a6133ebd89",
-    "type": "page",
-    "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89",
-    "title": ""
-}
 
-$ pychrome close 557d8315-e909-466c-bf20-f5a6133ebd89
-Target is closing
-```
+![pychrome_tab_management](https://raw.githubusercontent.com/fate0/pychrome/master/docs/images/pychrome_tab_management.png)
+
 
 ## Examples
 

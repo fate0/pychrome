@@ -6,7 +6,7 @@
 [![PyPI](https://img.shields.io/pypi/v/pychrome.svg)](https://pypi.python.org/pypi/pychrome)
 [![PyPI](https://img.shields.io/pypi/pyversions/pychrome.svg)](https://github.com/fate0/pychrome)
 
-A Python Package for the Google Chrome Dev Protocol
+A Python Package for the Google Chrome Dev Protocol, [more document](https://fate0.github.io/pychrome/)
 
 ## Table of Contents
 
@@ -14,6 +14,7 @@ A Python Package for the Google Chrome Dev Protocol
 * [Setup Chrome](#setup-chrome)
 * [Getting Started](#getting-started)
 * [Tab management](#tab-management)
+* [Debug](#debug)
 * [Examples](#examples)
 * [Ref](#ref)
 
