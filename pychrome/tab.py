@@ -64,24 +64,12 @@ class Tab(object):
         self._handle_event_th = threading.Thread(target=self._handle_event_loop)
 
         self._stopped = threading.Event()
-        self._started = threading.Event()
+        self._started = False
+        self.status = self.status_initial
 
         self.event_handlers = {}
         self.method_results = {}
         self.event_queue = queue.Queue()
-
-    def _init(self):
-        if self._started.is_set():
-            return
-
-        if not self._websocket_url:
-            raise RuntimeException("Already has another client connect to this tab")
-
-        self._started.set()
-        self._stopped.clear()
-        self._ws = websocket.create_connection(self._websocket_url)
-        self._recv_th.start()
-        self._handle_event_th.start()
 
     def _send(self, message, timeout=None):
         if 'id' not in message:
@@ -121,6 +109,9 @@ class Tab(object):
             self.method_results.pop(message['id'], None)
 
     def _recv_loop(self):
+        if not self._started:
+            raise RuntimeException("Cannot call method before it is started")
+
         while not self._stopped.is_set():
             try:
                 self._ws.settimeout(1)
@@ -143,6 +134,9 @@ class Tab(object):
                 warnings.warn("unknown message: %s" % message)
 
     def _handle_event_loop(self):
+        if not self._started:
+            raise RuntimeException("Cannot call method before it is started")
+
         while not self._stopped.is_set():
             try:
                 event = self.event_queue.get(timeout=1)
@@ -161,13 +155,15 @@ class Tab(object):
         return attr
 
     def call_method(self, _method, *args, **kwargs):
+        if not self._started:
+            raise RuntimeException("Cannot call method before it is started")
+
         if args:
             raise CallMethodException("the params should be key=value format")
 
         if self._stopped.is_set():
             raise RuntimeException("Tab has been stopped")
 
-        self._init()
         timeout = kwargs.pop("_timeout", None)
         result = self._send({"method": _method, "params": kwargs}, timeout=timeout)
         if 'result' not in result and 'error' in result:
@@ -193,28 +189,37 @@ class Tab(object):
         self.event_handlers = {}
         return True
 
-    def status(self):
-        if not self._started.is_set() and not self._stopped.is_set():
-            return Tab.status_initial
-        if self._started.is_set() and not self._stopped.is_set():
-            return Tab.status_started
-        if self._started.is_set() and self._stopped.is_set():
-            return Tab.status_stopped
-        else:
-            raise RuntimeException("Tab Unknown status")
+    def start(self):
+        if self._started:
+            return False
+
+        if not self._websocket_url:
+            raise RuntimeException("Already has another client connect to this tab")
+
+        self._started = True
+        self.status = self.status_started
+        self._stopped.clear()
+        self._ws = websocket.create_connection(self._websocket_url)
+        self._recv_th.start()
+        self._handle_event_th.start()
+        return True
 
     def stop(self):
         if self._stopped.is_set():
-            raise RuntimeException("Tab has been stopped")
+            return False
 
-        if not self._started.is_set():
+        if not self._started:
             raise RuntimeException("Tab is not running")
 
+        self.status = self.status_stopped
         self._stopped.set()
         self._ws.close()
+        return True
 
     def wait(self, timeout=None):
-        self._init()
+        if not self._started:
+            raise RuntimeException("Tab is not running")
+
         return self._stopped.wait(timeout)
 
     def __str__(self):
