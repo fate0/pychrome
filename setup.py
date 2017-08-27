@@ -18,6 +18,7 @@ with open('pychrome/__init__.py', 'rb') as f:
 
 
 requirements = [
+    'gevent>=1.2.2',
     'click>=6.0',
     'websocket-client>=0.44.0',
     'requests>=2.13.0',
@@ -48,10 +49,7 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
