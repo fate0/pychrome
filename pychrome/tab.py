@@ -23,7 +23,6 @@ except ImportError:
 __all__ = ["Tab"]
 
 
-PYCHROME_DEBUG = os.getenv("DEBUG", False)
 logger = logging.getLogger(__name__)
 
 
@@ -53,6 +52,7 @@ class Tab(object):
     def __init__(self, **kwargs):
         self.id = kwargs.get("id")
         self.type = kwargs.get("type")
+        self.debug = os.getenv("DEBUG", False)
 
         self._websocket_url = kwargs.get("webSocketDebuggerUrl")
         self._kwargs = kwargs
@@ -81,7 +81,7 @@ class Tab(object):
         self.method_results[message['id']] = queue.Queue()
         message_json = json.dumps(message)
 
-        if PYCHROME_DEBUG:
+        if self.debug:
             print("SEND ► %s" % message_json)
 
         with self._ws_send_lock:
@@ -126,7 +126,7 @@ class Tab(object):
             except (websocket.WebSocketConnectionClosedException, OSError):
                 return
 
-            if PYCHROME_DEBUG:
+            if self.debug:
                 print('◀ RECV %s' % message_json)
 
             if "method" in message:
