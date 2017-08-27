@@ -26,5 +26,3 @@ class TimeoutException(PyChromeException):
 
 class RuntimeException(PyChromeException):
     pass
-
-

@@ -4,7 +4,7 @@
 import time
 import base64
 import pychrome
-import threading
+import gevent.lock
 
 
 urls = [
@@ -16,7 +16,7 @@ urls = [
 
 
 class EventHandler(object):
-    screen_lock = threading.Lock()
+    screen_lock = gevent.lock.RLock()
 
     def __init__(self, browser, tab):
         self.browser = browser

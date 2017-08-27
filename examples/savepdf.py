@@ -5,7 +5,7 @@ import time
 import base64
 import pychrome
 
-import threading
+import gevent.lock
 
 
 urls = [
@@ -17,7 +17,7 @@ urls = [
 
 
 class EventHandler(object):
-    pdf_lock = threading.Lock()
+    pdf_lock = gevent.lock.RLock()
 
     def __init__(self, browser, tab):
         self.browser = browser

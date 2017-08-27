@@ -3,14 +3,12 @@
 
 from __future__ import unicode_literals
 
+import gevent.monkey
+gevent.monkey.patch_socket()
+
 import requests
 
 from pychrome.tab import Tab
-
-try:
-    import Queue as queue
-except ImportError:
-    import queue
 
 
 __all__ = ["Browser"]
