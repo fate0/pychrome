@@ -18,8 +18,8 @@ before_install:
   - google-chrome-beta --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 install:
-  - pip install -U tox pytest pytest-cov codecov
   - pip install -r requirements_dev.txt
+  - python setup.py install
 
 script: tox -e ${TOXENV}
 
