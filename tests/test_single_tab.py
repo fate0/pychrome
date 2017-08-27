@@ -304,7 +304,7 @@ def test_callback_exception():
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):
-        raise Exception("will not stop")
+        raise Exception("test callback exception")
 
     tab.start()
     tab.Network.requestWillBeSent = request_will_be_sent
