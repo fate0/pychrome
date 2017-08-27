@@ -2,22 +2,17 @@
     "docs": [
         {
             "location": "/",
-            "text": "pychrome\n\n\n\n\n\n\n\n\n\n\n\n\nA Python Package for the Google Chrome Dev Protocol\n\n\nTable of Contents\n\n\n\n\nInstallation\n\n\nSetup Chrome\n\n\nGetting Started\n\n\nTab management\n\n\nExamples\n\n\nRef\n\n\n\n\nInstallation\n\n\nTo install pychrome, simply:\n\n\n$ pip install -U git+https://github.com/fate0/pychrome.git\n\n\n\n\nor from pypi:\n\n\n$ pip install -U pychrome\n\n\n\n\nor from source:\n\n\n$ python setup.py install\n\n\n\n\nSetup Chrome\n\n\nsimply:\n\n\n$ google-chrome --remote-debugging-port=9222\n\n\n\n\nor headless mode (chrome version >= 59):\n\n\n$ google-chrome --headless --disable-gpu --remote-debugging-port=9222\n\n\n\n\nor use docker:\n\n\n$ docker pull fate0/headless-chrome\n$ docker run -it --rm --cap-add=SYS_ADMIN -p9222:9222 fate0/headless-chrome\n\n\n\n\nGetting Started\n\n\n# create a browser instance\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\n# list all tabs (default has a blank tab)\ntabs = browser.list_tab()\n\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\n# register callback if you want\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\ntab.Network.requestWillBeSent = request_will_be_sent\n\n# call method\ntab.Network.enable()\n# call method with timeout\ntab.Page.navigate(url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\n# wait for loading\ntab.wait(5)\n\n# stop tab (stop handle events and stop recv message from chrome)\ntab.stop()\n\n# close tab\nbrowser.close_tab(tab)\n\n\n\n\n\nor (alternate syntax)\n\n\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\ntabs = browser.list_tab()\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\n\ntab.set_listener(\"Network.requestWillBeSent\", request_will_be_sent)\n\ntab.call_method(\"Network.enable\")\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\ntab.wait(5)\ntab.stop()\n\nbrowser.close_tab(tab)\n\n\n\n\nmore methods or events could be found in\n\nChrome DevTools Protocol\n\n\nTab management\n\n\nrun \npychrome -h\n for more info\n\n\nexample:\n\n\n$ pychrome new http://www.fatezero.org\n{\n    \"description\": \"\",\n    \"url\": \"http://www.fatezero.org/\",\n    \"webSocketDebuggerUrl\": \"ws://127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"id\": \"557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"type\": \"page\",\n    \"devtoolsFrontendUrl\": \"/devtools/inspector.html?ws=127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"title\": \"\"\n}\n\n$ pychrome close 557d8315-e909-466c-bf20-f5a6133ebd89\nTarget is closing\n\n\n\n\nExamples\n\n\nplease see the \nexamples\n directory for more examples\n\n\nRef\n\n\n\n\nchrome-remote-interface\n\n\nChrome DevTools Protocol",
-            "title": "Home"
+            "text": "pychrome\n\n\n\n\n\n\n\n\n\n\n\n\nA Python Package for the Google Chrome Dev Protocol, \nmore document\n\n\nInstallation\n\n\nTo install pychrome, simply:\n\n\n$ pip install -U pychrome\n\n\n\n\nor from GitHub:\n\n\n$ pip install -U git+https://github.com/fate0/pychrome.git\n\n\n\n\nor from source:\n\n\n$ python setup.py install\n\n\n\n\nSetup Chrome\n\n\nsimply:\n\n\n$ google-chrome --remote-debugging-port=9222\n\n\n\n\nor headless mode (chrome version >= 59):\n\n\n$ google-chrome --headless --disable-gpu --remote-debugging-port=9222\n\n\n\n\nor use docker:\n\n\n$ docker pull fate0/headless-chrome\n$ docker run -it --rm --cap-add=SYS_ADMIN -p9222:9222 fate0/headless-chrome\n\n\n\n\nGetting Started\n\n\n# create a browser instance\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\n# list all tabs (default has a blank tab)\ntabs = browser.list_tab()\n\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\n# register callback if you want\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\ntab.Network.requestWillBeSent = request_will_be_sent\n\n# start the tab \ntab.start()\n\n# call method\ntab.Network.enable()\n# call method with timeout\ntab.Page.navigate(url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\n# wait for loading\ntab.wait(5)\n\n# stop the tab (stop handle events and stop recv message from chrome)\ntab.stop()\n\n# close tab\nbrowser.close_tab(tab)\n\n\n\n\n\nor (alternate syntax)\n\n\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\ntabs = browser.list_tab()\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\n\ntab.set_listener(\"Network.requestWillBeSent\", request_will_be_sent)\n\ntab.start()\ntab.call_method(\"Network.enable\")\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\ntab.wait(5)\ntab.stop()\n\nbrowser.close_tab(tab)\n\n\n\n\nmore methods or events could be found in\n\nChrome DevTools Protocol\n\n\nDebug\n\n\nset DEBUG env variable:\n\n\n\n\nTab management\n\n\nrun \npychrome -h\n for more info\n\n\nexample:\n\n\n\n\nExamples\n\n\nplease see the \nexamples\n directory for more examples\n\n\nRef\n\n\n\n\nchrome-remote-interface\n\n\nChrome DevTools Protocol",
+            "title": "Intro"
         },
         {
             "location": "/#pychrome",
-            "text": "A Python Package for the Google Chrome Dev Protocol",
+            "text": "A Python Package for the Google Chrome Dev Protocol,  more document",
             "title": "pychrome"
         },
         {
-            "location": "/#table-of-contents",
-            "text": "Installation  Setup Chrome  Getting Started  Tab management  Examples  Ref",
-            "title": "Table of Contents"
-        },
-        {
             "location": "/#installation",
-            "text": "To install pychrome, simply:  $ pip install -U git+https://github.com/fate0/pychrome.git  or from pypi:  $ pip install -U pychrome  or from source:  $ python setup.py install",
+            "text": "To install pychrome, simply:  $ pip install -U pychrome  or from GitHub:  $ pip install -U git+https://github.com/fate0/pychrome.git  or from source:  $ python setup.py install",
             "title": "Installation"
         },
         {
@@ -27,12 +22,17 @@
         },
         {
             "location": "/#getting-started",
-            "text": "# create a browser instance\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\n# list all tabs (default has a blank tab)\ntabs = browser.list_tab()\n\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\n# register callback if you want\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\ntab.Network.requestWillBeSent = request_will_be_sent\n\n# call method\ntab.Network.enable()\n# call method with timeout\ntab.Page.navigate(url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\n# wait for loading\ntab.wait(5)\n\n# stop tab (stop handle events and stop recv message from chrome)\ntab.stop()\n\n# close tab\nbrowser.close_tab(tab)  or (alternate syntax)  browser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\ntabs = browser.list_tab()\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\n\ntab.set_listener(\"Network.requestWillBeSent\", request_will_be_sent)\n\ntab.call_method(\"Network.enable\")\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\ntab.wait(5)\ntab.stop()\n\nbrowser.close_tab(tab)  more methods or events could be found in Chrome DevTools Protocol",
+            "text": "# create a browser instance\nbrowser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\n# list all tabs (default has a blank tab)\ntabs = browser.list_tab()\n\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\n# register callback if you want\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\ntab.Network.requestWillBeSent = request_will_be_sent\n\n# start the tab \ntab.start()\n\n# call method\ntab.Network.enable()\n# call method with timeout\ntab.Page.navigate(url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\n# wait for loading\ntab.wait(5)\n\n# stop the tab (stop handle events and stop recv message from chrome)\ntab.stop()\n\n# close tab\nbrowser.close_tab(tab)  or (alternate syntax)  browser = pychrome.Browser(url=\"http://127.0.0.1:9222\")\n\ntabs = browser.list_tab()\nif not tabs:\n    tab = browser.new_tab()\nelse:\n    tab = tabs[0]\n\n\ndef request_will_be_sent(**kwargs):\n    print(\"loading: %s\" % kwargs.get('request').get('url'))\n\n\ntab.set_listener(\"Network.requestWillBeSent\", request_will_be_sent)\n\ntab.start()\ntab.call_method(\"Network.enable\")\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\n\ntab.wait(5)\ntab.stop()\n\nbrowser.close_tab(tab)  more methods or events could be found in Chrome DevTools Protocol",
             "title": "Getting Started"
         },
         {
+            "location": "/#debug",
+            "text": "set DEBUG env variable:",
+            "title": "Debug"
+        },
+        {
             "location": "/#tab-management",
-            "text": "run  pychrome -h  for more info  example:  $ pychrome new http://www.fatezero.org\n{\n    \"description\": \"\",\n    \"url\": \"http://www.fatezero.org/\",\n    \"webSocketDebuggerUrl\": \"ws://127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"id\": \"557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"type\": \"page\",\n    \"devtoolsFrontendUrl\": \"/devtools/inspector.html?ws=127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89\",\n    \"title\": \"\"\n}\n\n$ pychrome close 557d8315-e909-466c-bf20-f5a6133ebd89\nTarget is closing",
+            "text": "run  pychrome -h  for more info  example:",
             "title": "Tab management"
         },
         {
@@ -44,6 +44,106 @@
             "location": "/#ref",
             "text": "chrome-remote-interface  Chrome DevTools Protocol",
             "title": "Ref"
+        },
+        {
+            "location": "/api/browser/",
+            "text": "class: Browser\n\n\nbrowser.new_tab([url][, timeout])\n\n\n\n\nurl\n <[string]>\n\n\ntimeout\n <[int]>\n\n\nreturn: <[Tab]>\n\n\n\n\nexample:\n\n\nimport pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.new_tab(\"http://www.fatezero.org\"))\n\n\n\n\noutput:\n\n\n<Tab [0261adad-1b83-4d87-946f-08f0b50ca175]>\n\n\n\n\nbrowser.list_tab([timeout])\n\n\n\n\ntimeout\n\n\nreturn: list\n\n\n\n\nexample:\n\n\nimport pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.list_tab())\n\n\n\n\noutput:\n\n\n[<Tab [0261adad-1b83-4d87-946f-08f0b50ca175]>, <Tab [b0348512-d6da-45ed-b8d4-2849998c7f3e]>]\n\n\n\n\nbrowser.activate_tab(tab_id[, timeout])\n\n\n\n\ntab_id\n\n\nreturn: string\n\n\n\n\nexample:\n\n\nimport pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.activate_tab('0261adad-1b83-4d87-946f-08f0b50ca175'))\n\n\n\n\noutput:\n\n\nTarget activated\n\n\n\n\nbrowser.close_tab(tab_id[, timeout])\n\n\n\n\ntab_id\n\n\ntimeout\n\n\n\n\nexample:\n\n\nimport pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.close_tab('0261adad-1b83-4d87-946f-08f0b50ca175'))\n\n\n\n\noutput:\n\n\nTarget is closing\n\n\n\n\nbrowser.version([timeout])\n\n\n\n\ntimeout\n\n\nreturn: string\n\n\n\n\nexample:\n\n\nimport pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.version())\n\n\n\n\noutput:\n\n\n{'webSocketDebuggerUrl': 'ws://127.0.0.1:9222/devtools/browser/36d5044d-4ef2-421b-b105-35c79edf7fea', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/62.0.3197.0 Safari/537.36', 'Protocol-Version': '1.2', 'Browser': 'HeadlessChrome/62.0.3197.0', 'WebKit-Version': '537.36 (@a19b1504d1a1f40e6c5358ec9880eb06b506b007)', 'V8-Version': '6.2.369'}",
+            "title": "Browser"
+        },
+        {
+            "location": "/api/browser/#class-browser",
+            "text": "",
+            "title": "class: Browser"
+        },
+        {
+            "location": "/api/browser/#browsernew_taburl-timeout",
+            "text": "url  <[string]>  timeout  <[int]>  return: <[Tab]>   example:  import pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.new_tab(\"http://www.fatezero.org\"))  output:  <Tab [0261adad-1b83-4d87-946f-08f0b50ca175]>",
+            "title": "browser.new_tab([url][, timeout])"
+        },
+        {
+            "location": "/api/browser/#browserlist_tabtimeout",
+            "text": "timeout  return: list   example:  import pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.list_tab())  output:  [<Tab [0261adad-1b83-4d87-946f-08f0b50ca175]>, <Tab [b0348512-d6da-45ed-b8d4-2849998c7f3e]>]",
+            "title": "browser.list_tab([timeout])"
+        },
+        {
+            "location": "/api/browser/#browseractivate_tabtab_id-timeout",
+            "text": "tab_id  return: string   example:  import pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.activate_tab('0261adad-1b83-4d87-946f-08f0b50ca175'))  output:  Target activated",
+            "title": "browser.activate_tab(tab_id[, timeout])"
+        },
+        {
+            "location": "/api/browser/#browserclose_tabtab_id-timeout",
+            "text": "tab_id  timeout   example:  import pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.close_tab('0261adad-1b83-4d87-946f-08f0b50ca175'))  output:  Target is closing",
+            "title": "browser.close_tab(tab_id[, timeout])"
+        },
+        {
+            "location": "/api/browser/#browserversiontimeout",
+            "text": "timeout  return: string   example:  import pychrome\n\nbrowser = pychrome.Browser()\nprint(browser.version())  output:  {'webSocketDebuggerUrl': 'ws://127.0.0.1:9222/devtools/browser/36d5044d-4ef2-421b-b105-35c79edf7fea', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/62.0.3197.0 Safari/537.36', 'Protocol-Version': '1.2', 'Browser': 'HeadlessChrome/62.0.3197.0', 'WebKit-Version': '537.36 (@a19b1504d1a1f40e6c5358ec9880eb06b506b007)', 'V8-Version': '6.2.369'}",
+            "title": "browser.version([timeout])"
+        },
+        {
+            "location": "/api/tab/",
+            "text": "class: Tab\n\n\nattribute: id\n\n\ntab id\n\n\nattribute: type\n\n\ntab type\n\n\nattribute: status\n\n\ntab status, could be \ninitial\n, \nstarted\n, \nstopped\n\n\nattribute: debug\n\n\nexample:\n\n\nimport pychrome\n\nbrowser = pychrome.Browser()\ntab = browser.new_tab(\"http://www.fatezero.org\")\n\ntab.debug = True\n\ntab.start()\ntab.call_method(\"Network.enable\")\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\ntab.stop()\n\nbrowser.close_tab(tab)\n\n\n\n\noutput:\n\n\nSEND \u25ba {\"method\": \"Network.enable\", \"id\": 1001, \"params\": {}}\n\u25c0 RECV {\"id\":1001,\"result\":{}}\nSEND \u25ba {\"method\": \"Page.navigate\", \"id\": 1002, \"params\": {\"url\": \"https://github.com/fate0/pychrome\"}}\n\u25c0 RECV {\"method\":\"Network.loadingFailed\",\"params\":{\"requestId\":\"34905.1\",\"timestamp\":87792.94521,\"type\":\"Other\",\"errorText\":\"net::ERR_ABORTED\",\"canceled\":true}}\n\u25c0 RECV {\"method\":\"Network.requestWillBeSent\",\"params\":{\"requestId\":\"34905.2\",\"loaderId\":\"34905.1\",\"documentURL\":\"https://github.com/fate0/pychrome\",\"request\":{\"url\":\"https://github.com/fate0/pychrome\",\"method\":\"GET\",\"headers\":{\"Upgrade-Insecure-Requests\":\"1\",\"User-Agent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/62.0.3197.0 Safari/537.36\"},\"mixedContentType\":\"none\",\"initialPriority\":\"VeryHigh\",\"referrerPolicy\":\"no-referrer-when-downgrade\"},\"timestamp\":87792.945539,\"wallTime\":1503817729.18642,\"initiator\":{\"type\":\"other\"},\"type\":\"Document\",\"frameId\":\"34905.1\"}}\n\u25c0 RECV {\"id\":1002,\"result\":{\"frameId\":\"34905.1\"}}\n\n\n\n\nstart()\n\n\n\n\nreturn: bool\n\n\n\n\nStart the tab's activity\n\n\nstop()\n\n\n\n\nreturn: bool\n\n\n\n\nwait([timeout])\n\n\n\n\ntimeout: int\n\n\nreturn: bool\n\n\n\n\nWait until the tab stop or timeout\n\n\ncall_method()\n\n\n\n\nreturn: \n\n\n\n\nimport pychrome\n\nbrowser = pychrome.Browser()\ntab = browser.new_tab()\n\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\ntab.stop()\n\n\n\n\nset_listener()\n\n\n\n\nreturn: bool\n\n\n\n\nget_listener()\n\n\n\n\nreturn: bool\n\n\n\n\ndel_all_listeners()\n\n\n\n\nreturn: bool\n\n\n\n\ndelete all listeners",
+            "title": "Tab"
+        },
+        {
+            "location": "/api/tab/#class-tab",
+            "text": "",
+            "title": "class: Tab"
+        },
+        {
+            "location": "/api/tab/#attribute-id",
+            "text": "tab id",
+            "title": "attribute: id"
+        },
+        {
+            "location": "/api/tab/#attribute-type",
+            "text": "tab type",
+            "title": "attribute: type"
+        },
+        {
+            "location": "/api/tab/#attribute-status",
+            "text": "tab status, could be  initial ,  started ,  stopped",
+            "title": "attribute: status"
+        },
+        {
+            "location": "/api/tab/#attribute-debug",
+            "text": "example:  import pychrome\n\nbrowser = pychrome.Browser()\ntab = browser.new_tab(\"http://www.fatezero.org\")\n\ntab.debug = True\n\ntab.start()\ntab.call_method(\"Network.enable\")\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\ntab.stop()\n\nbrowser.close_tab(tab)  output:  SEND \u25ba {\"method\": \"Network.enable\", \"id\": 1001, \"params\": {}}\n\u25c0 RECV {\"id\":1001,\"result\":{}}\nSEND \u25ba {\"method\": \"Page.navigate\", \"id\": 1002, \"params\": {\"url\": \"https://github.com/fate0/pychrome\"}}\n\u25c0 RECV {\"method\":\"Network.loadingFailed\",\"params\":{\"requestId\":\"34905.1\",\"timestamp\":87792.94521,\"type\":\"Other\",\"errorText\":\"net::ERR_ABORTED\",\"canceled\":true}}\n\u25c0 RECV {\"method\":\"Network.requestWillBeSent\",\"params\":{\"requestId\":\"34905.2\",\"loaderId\":\"34905.1\",\"documentURL\":\"https://github.com/fate0/pychrome\",\"request\":{\"url\":\"https://github.com/fate0/pychrome\",\"method\":\"GET\",\"headers\":{\"Upgrade-Insecure-Requests\":\"1\",\"User-Agent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/62.0.3197.0 Safari/537.36\"},\"mixedContentType\":\"none\",\"initialPriority\":\"VeryHigh\",\"referrerPolicy\":\"no-referrer-when-downgrade\"},\"timestamp\":87792.945539,\"wallTime\":1503817729.18642,\"initiator\":{\"type\":\"other\"},\"type\":\"Document\",\"frameId\":\"34905.1\"}}\n\u25c0 RECV {\"id\":1002,\"result\":{\"frameId\":\"34905.1\"}}",
+            "title": "attribute: debug"
+        },
+        {
+            "location": "/api/tab/#start",
+            "text": "return: bool   Start the tab's activity",
+            "title": "start()"
+        },
+        {
+            "location": "/api/tab/#stop",
+            "text": "return: bool",
+            "title": "stop()"
+        },
+        {
+            "location": "/api/tab/#waittimeout",
+            "text": "timeout: int  return: bool   Wait until the tab stop or timeout",
+            "title": "wait([timeout])"
+        },
+        {
+            "location": "/api/tab/#call_method",
+            "text": "return:    import pychrome\n\nbrowser = pychrome.Browser()\ntab = browser.new_tab()\n\ntab.call_method(\"Page.navigate\", url=\"https://github.com/fate0/pychrome\", _timeout=5)\ntab.stop()",
+            "title": "call_method()"
+        },
+        {
+            "location": "/api/tab/#set_listener",
+            "text": "return: bool",
+            "title": "set_listener()"
+        },
+        {
+            "location": "/api/tab/#get_listener",
+            "text": "return: bool",
+            "title": "get_listener()"
+        },
+        {
+            "location": "/api/tab/#del_all_listeners",
+            "text": "return: bool   delete all listeners",
+            "title": "del_all_listeners()"
         }
     ]
 }

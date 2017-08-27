@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="fate0">
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Tab - pychrome</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Tab";
+    var mkdocs_page_input_path = "api/tab.md";
+    var mkdocs_page_url = "/api/tab/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> pychrome</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Intro</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">API</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../browser/">Browser</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Tab</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#class-tab">class: Tab</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#attribute-id">attribute: id</a></li>
+        
+            <li><a class="toctree-l4" href="#attribute-type">attribute: type</a></li>
+        
+            <li><a class="toctree-l4" href="#attribute-status">attribute: status</a></li>
+        
+            <li><a class="toctree-l4" href="#attribute-debug">attribute: debug</a></li>
+        
+            <li><a class="toctree-l4" href="#start">start()</a></li>
+        
+            <li><a class="toctree-l4" href="#stop">stop()</a></li>
+        
+            <li><a class="toctree-l4" href="#waittimeout">wait([timeout])</a></li>
+        
+            <li><a class="toctree-l4" href="#call_method">call_method()</a></li>
+        
+            <li><a class="toctree-l4" href="#set_listener">set_listener()</a></li>
+        
+            <li><a class="toctree-l4" href="#get_listener">get_listener()</a></li>
+        
+            <li><a class="toctree-l4" href="#del_all_listeners">del_all_listeners()</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">pychrome</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>API &raquo;</li>
+        
+      
+    
+    <li>Tab</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/fate0/pychrome/edit/master/docs/api/tab.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="class-tab">class: Tab</h2>
+<h4 id="attribute-id">attribute: id</h4>
+<p>tab id</p>
+<h4 id="attribute-type">attribute: type</h4>
+<p>tab type</p>
+<h4 id="attribute-status">attribute: status</h4>
+<p>tab status, could be <code>initial</code>, <code>started</code>, <code>stopped</code></p>
+<h4 id="attribute-debug">attribute: debug</h4>
+<p>example:</p>
+<pre><code class="python">import pychrome
+
+browser = pychrome.Browser()
+tab = browser.new_tab(&quot;http://www.fatezero.org&quot;)
+
+tab.debug = True
+
+tab.start()
+tab.call_method(&quot;Network.enable&quot;)
+tab.call_method(&quot;Page.navigate&quot;, url=&quot;https://github.com/fate0/pychrome&quot;, _timeout=5)
+tab.stop()
+
+browser.close_tab(tab)
+</code></pre>
+
+<p>output:</p>
+<pre><code>SEND ► {&quot;method&quot;: &quot;Network.enable&quot;, &quot;id&quot;: 1001, &quot;params&quot;: {}}
+◀ RECV {&quot;id&quot;:1001,&quot;result&quot;:{}}
+SEND ► {&quot;method&quot;: &quot;Page.navigate&quot;, &quot;id&quot;: 1002, &quot;params&quot;: {&quot;url&quot;: &quot;https://github.com/fate0/pychrome&quot;}}
+◀ RECV {&quot;method&quot;:&quot;Network.loadingFailed&quot;,&quot;params&quot;:{&quot;requestId&quot;:&quot;34905.1&quot;,&quot;timestamp&quot;:87792.94521,&quot;type&quot;:&quot;Other&quot;,&quot;errorText&quot;:&quot;net::ERR_ABORTED&quot;,&quot;canceled&quot;:true}}
+◀ RECV {&quot;method&quot;:&quot;Network.requestWillBeSent&quot;,&quot;params&quot;:{&quot;requestId&quot;:&quot;34905.2&quot;,&quot;loaderId&quot;:&quot;34905.1&quot;,&quot;documentURL&quot;:&quot;https://github.com/fate0/pychrome&quot;,&quot;request&quot;:{&quot;url&quot;:&quot;https://github.com/fate0/pychrome&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;headers&quot;:{&quot;Upgrade-Insecure-Requests&quot;:&quot;1&quot;,&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/62.0.3197.0 Safari/537.36&quot;},&quot;mixedContentType&quot;:&quot;none&quot;,&quot;initialPriority&quot;:&quot;VeryHigh&quot;,&quot;referrerPolicy&quot;:&quot;no-referrer-when-downgrade&quot;},&quot;timestamp&quot;:87792.945539,&quot;wallTime&quot;:1503817729.18642,&quot;initiator&quot;:{&quot;type&quot;:&quot;other&quot;},&quot;type&quot;:&quot;Document&quot;,&quot;frameId&quot;:&quot;34905.1&quot;}}
+◀ RECV {&quot;id&quot;:1002,&quot;result&quot;:{&quot;frameId&quot;:&quot;34905.1&quot;}}
+</code></pre>
+
+<h4 id="start">start()</h4>
+<ul>
+<li>return: bool</li>
+</ul>
+<p>Start the tab's activity</p>
+<h4 id="stop">stop()</h4>
+<ul>
+<li>return: bool</li>
+</ul>
+<h4 id="waittimeout">wait([timeout])</h4>
+<ul>
+<li>timeout: int</li>
+<li>return: bool</li>
+</ul>
+<p>Wait until the tab stop or timeout</p>
+<h4 id="call_method">call_method()</h4>
+<ul>
+<li>return: </li>
+</ul>
+<pre><code class="python">import pychrome
+
+browser = pychrome.Browser()
+tab = browser.new_tab()
+
+tab.call_method(&quot;Page.navigate&quot;, url=&quot;https://github.com/fate0/pychrome&quot;, _timeout=5)
+tab.stop()
+</code></pre>
+
+<h4 id="set_listener">set_listener()</h4>
+<ul>
+<li>return: bool</li>
+</ul>
+<h4 id="get_listener">get_listener()</h4>
+<ul>
+<li>return: bool</li>
+</ul>
+<h4 id="del_all_listeners">del_all_listeners()</h4>
+<ul>
+<li>return: bool</li>
+</ul>
+<p>delete all listeners</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../browser/" class="btn btn-neutral" title="Browser"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/fate0/pychrome" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../browser/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script src="../../js/theme.js"></script>
+
+</body>
+</html>
