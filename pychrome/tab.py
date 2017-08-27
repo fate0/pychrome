@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 
+import os
 import json
 import logging
 import warnings
@@ -22,6 +23,7 @@ except ImportError:
 __all__ = ["Tab"]
 
 
+PYCHROME_DEBUG = os.getenv("DEBUG", False)
 logger = logging.getLogger(__name__)
 
 
@@ -78,7 +80,9 @@ class Tab(object):
 
         self.method_results[message['id']] = queue.Queue()
         message_json = json.dumps(message)
-        logger.debug("SEND ► %s" % message_json)
+
+        if PYCHROME_DEBUG:
+            print("SEND ► %s" % message_json)
 
         with self._ws_send_lock:
             self._ws.send(message_json)
@@ -122,7 +126,8 @@ class Tab(object):
             except (websocket.WebSocketConnectionClosedException, OSError):
                 return
 
-            logger.debug('◀ RECV %s' % message_json)
+            if PYCHROME_DEBUG:
+                print('◀ RECV %s' % message_json)
 
             if "method" in message:
                 self.event_queue.put(message)
@@ -147,7 +152,7 @@ class Tab(object):
                 try:
                     self.event_handlers[event['method']](**event['params'])
                 except Exception as e:
-                    warnings.warn("callback %s error: %s" % (event['method'], str(e)))
+                    logger.error("callback %s exception" % event['method'], exc_info=True)
 
     def __getattr__(self, item):
         attr = GenericAttr(item, self)
