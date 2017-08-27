@@ -131,26 +131,21 @@ more methods or events could be found in
 [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/tot/)
 
 
+## Debug
+
+set DEBUG env variable:
+
+![pychrome_with_debug_env](https://raw.githubusercontent.com/fate0/pychrome/master/docs/images/pychrome_with_debug_env.png)
+
+
 ## Tab management
 
 run `pychrome -h` for more info
 
 example:
-```
-$ pychrome new http://www.fatezero.org
-{
-    "description": "",
-    "url": "http://www.fatezero.org/",
-    "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89",
-    "id": "557d8315-e909-466c-bf20-f5a6133ebd89",
-    "type": "page",
-    "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:9222/devtools/page/557d8315-e909-466c-bf20-f5a6133ebd89",
-    "title": ""
-}
 
-$ pychrome close 557d8315-e909-466c-bf20-f5a6133ebd89
-Target is closing
-```
+![pychrome_tab_management](https://raw.githubusercontent.com/fate0/pychrome/master/docs/images/pychrome_tab_management.png)
+
 
 ## Examples
 
