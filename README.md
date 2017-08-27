@@ -23,13 +23,13 @@ A Python Package for the Google Chrome Dev Protocol
 To install pychrome, simply:
 
 ```
-$ pip install -U git+https://github.com/fate0/pychrome.git
-```
-
-or from pypi:
-
-```
 $ pip install -U pychrome
+```
+
+or from GitHub:
+
+```
+$ pip install -U git+https://github.com/fate0/pychrome.git
 ```
 
 or from source:
@@ -80,6 +80,9 @@ def request_will_be_sent(**kwargs):
 
 tab.Network.requestWillBeSent = request_will_be_sent
 
+# start the tab 
+tab.start()
+
 # call method
 tab.Network.enable()
 # call method with timeout
@@ -88,7 +91,7 @@ tab.Page.navigate(url="https://github.com/fate0/pychrome", _timeout=5)
 # wait for loading
 tab.wait(5)
 
-# stop tab (stop handle events and stop recv message from chrome)
+# stop the tab (stop handle events and stop recv message from chrome)
 tab.stop()
 
 # close tab
@@ -114,6 +117,7 @@ def request_will_be_sent(**kwargs):
 
 tab.set_listener("Network.requestWillBeSent", request_will_be_sent)
 
+tab.start()
 tab.call_method("Network.enable")
 tab.call_method("Page.navigate", url="https://github.com/fate0/pychrome", _timeout=5)
 
