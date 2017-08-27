@@ -38,6 +38,7 @@ def test_normal_callmethod():
     browser = pychrome.Browser()
     tab = browser.new_tab()
 
+    tab.start()
     result = tab.Page.navigate(url="http://www.fatezero.org")
     assert result['frameId']
 
@@ -46,23 +47,27 @@ def test_normal_callmethod():
 
     assert result['result']['type'] == 'string'
     assert result['result']['value'] == 'www.fatezero.org'
+    tab.stop()
 
 
 def test_invalid_method():
     browser = pychrome.Browser()
     tab = browser.new_tab()
 
+    tab.start()
     try:
         tab.Page.NotExistMethod()
         assert False, "never get here"
     except pychrome.CallMethodException:
         pass
+    tab.stop()
 
 
 def test_invalid_params():
     browser = pychrome.Browser()
     tab = browser.new_tab()
 
+    tab.start()
     try:
         tab.Page.navigate()
         assert False, "never get here"
@@ -86,6 +91,8 @@ def test_invalid_params():
     except pychrome.CallMethodException:
         assert False, "never get here"
 
+    tab.stop()
+
 
 def test_set_event_listener():
     browser = pychrome.Browser()
@@ -94,6 +101,7 @@ def test_set_event_listener():
     def request_will_be_sent(**kwargs):
         tab.stop()
 
+    tab.start()
     tab.Network.requestWillBeSent = request_will_be_sent
     tab.Network.enable()
 
@@ -110,11 +118,13 @@ def test_set_wrong_listener():
     browser = pychrome.Browser()
     tab = browser.new_tab()
 
+    tab.start()
     try:
         tab.Network.requestWillBeSent = "test"
         assert False, "never get here"
     except pychrome.RuntimeException:
         pass
+    tab.stop()
 
 
 def test_get_event_listener():
@@ -124,6 +134,7 @@ def test_get_event_listener():
     def request_will_be_sent(**kwargs):
         tab.stop()
 
+    tab.start()
     tab.Network.requestWillBeSent = request_will_be_sent
     tab.Network.enable()
     try:
@@ -141,6 +152,8 @@ def test_get_event_listener():
     # notice this
     assert tab.Network.requestWillBeSent != tab.get_listener("Network.requestWillBeSent")
 
+    tab.stop()
+
 
 def test_reuse_tab_error():
     browser = pychrome.Browser()
@@ -149,6 +162,7 @@ def test_reuse_tab_error():
     def request_will_be_sent(**kwargs):
         tab.stop()
 
+    tab.start()
     tab.Network.requestWillBeSent = request_will_be_sent
     tab.Network.enable()
     try:
@@ -164,6 +178,7 @@ def test_reuse_tab_error():
         assert False, "never get here"
     except pychrome.RuntimeException:
         pass
+    tab.stop()
 
 
 def test_del_event_listener():
@@ -175,6 +190,7 @@ def test_del_event_listener():
         test_list.append(1)
         tab.Network.requestWillBeSent = None
 
+    tab.start()
     tab.Network.requestWillBeSent = request_will_be_sent
     tab.Network.enable()
     tab.Page.navigate(url="chrome://newtab/")
@@ -184,6 +200,7 @@ def test_del_event_listener():
         assert False, "never get here"
 
     assert len(test_list) == 1
+    tab.stop()
 
 
 def test_del_all_event_listener():
@@ -195,6 +212,7 @@ def test_del_all_event_listener():
         test_list.append(1)
         tab.del_all_listeners()
 
+    tab.start()
     tab.Network.requestWillBeSent = request_will_be_sent
     tab.Network.enable()
     tab.Page.navigate(url="chrome://newtab/")
@@ -203,6 +221,7 @@ def test_del_all_event_listener():
         assert False, "never get here"
 
     assert len(test_list) == 1
+    tab.stop()
 
 
 class CallableClass(object):
@@ -217,6 +236,7 @@ def test_use_callable_class_event_listener():
     browser = pychrome.Browser()
     tab = browser.new_tab()
 
+    tab.start()
     tab.Network.requestWillBeSent = CallableClass(tab)
     tab.Network.enable()
     try:
@@ -227,22 +247,25 @@ def test_use_callable_class_event_listener():
     if not tab.wait(timeout=5):
         assert False, "never get here"
 
+    tab.stop()
+
 
 def test_status():
     browser = pychrome.Browser()
     tab = browser.new_tab()
 
-    assert tab.status() == pychrome.Tab.status_initial
+    assert tab.status == pychrome.Tab.status_initial
 
     def request_will_be_sent(**kwargs):
         tab.stop()
 
     tab.Network.requestWillBeSent = request_will_be_sent
 
-    assert tab.status() == pychrome.Tab.status_initial
+    assert tab.status == pychrome.Tab.status_initial
 
+    tab.start()
     tab.Network.enable()
-    assert tab.status() == pychrome.Tab.status_started
+    assert tab.status == pychrome.Tab.status_started
 
     try:
         tab.Page.navigate(url="chrome://newtab/")
@@ -252,13 +275,15 @@ def test_status():
     if not tab.wait(timeout=5):
         assert False, "never get here"
 
-    assert tab.status() == pychrome.Tab.status_stopped
+    tab.stop()
+    assert tab.status == pychrome.Tab.status_stopped
 
 
 def test_call_method_timeout():
     browser = pychrome.Browser()
     tab = browser.new_tab()
 
+    tab.start()
     tab.Page.navigate(url="chrome://newtab/", _timeout=5)
 
     try:
@@ -271,6 +296,8 @@ def test_call_method_timeout():
     except pychrome.TimeoutException:
         pass
 
+    tab.stop()
+
 
 def test_callback_exception():
     browser = pychrome.Browser()
@@ -279,9 +306,12 @@ def test_callback_exception():
     def request_will_be_sent(**kwargs):
         raise Exception("will not stop")
 
+    tab.start()
     tab.Network.requestWillBeSent = request_will_be_sent
     tab.Network.enable()
     tab.Page.navigate(url="chrome://newtab/")
 
     if tab.wait(timeout=3):
         assert False, "never get here"
+
+    tab.stop()
