@@ -36,7 +36,7 @@ class Browser(object):
         rp = requests.get("%s/json" % self.dev_url, json=True, timeout=timeout)
         tabs_map = {}
         for tab_json in rp.json():
-            if tab_json['type'] != 'page':
+            if tab_json['type'] != 'page':  # pragma: no cover
                 continue
 
             if tab_json['id'] in self._tabs and self._tabs[tab_json['id']].status != Tab.status_stopped:
@@ -59,7 +59,7 @@ class Browser(object):
             tab_id = tab_id.id
 
         tab = self._tabs.pop(tab_id, None)
-        if tab and tab.status == Tab.status_started:
+        if tab and tab.status == Tab.status_started:  # pragma: no cover
             tab.stop()
 
         rp = requests.get("%s/json/close/%s" % (self.dev_url, tab_id), timeout=timeout)

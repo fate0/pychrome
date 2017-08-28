@@ -82,7 +82,7 @@ class Tab(object):
         self.method_results[message['id']] = gevent.queue.Queue()
         message_json = json.dumps(message)
 
-        if self.debug:
+        if self.debug:  # pragma: no cover
             print("SEND ► %s" % message_json)
 
         with self._ws_send_lock:
@@ -127,7 +127,7 @@ class Tab(object):
             except (websocket.WebSocketConnectionClosedException, OSError):
                 return
 
-            if self.debug:
+            if self.debug:  # pragma: no cover
                 print('◀ RECV %s' % message_json)
 
             if "method" in message:
@@ -136,7 +136,7 @@ class Tab(object):
             elif "id" in message:
                 if message["id"] in self.method_results:
                     self.method_results[message['id']].put(message)
-            else:
+            else:  # pragma: no cover
                 warnings.warn("unknown message: %s" % message)
 
     def _handle_event_loop(self):
