@@ -115,9 +115,6 @@ class Tab(object):
             self.method_results.pop(message['id'], None)
 
     def _recv_loop(self):
-        if not self._started:
-            raise RuntimeException("Cannot call method before it is started")
-
         while not self._stopped.is_set():
             try:
                 self._ws.settimeout(1)
@@ -144,9 +141,6 @@ class Tab(object):
                 warnings.warn("unknown message: %s" % message)
 
     def _handle_event_loop(self):
-        if not self._started:
-            raise RuntimeException("Cannot call method before it is started")
-
         while not self._stopped.is_set():
             try:
                 event = self.event_queue.get(timeout=1)
