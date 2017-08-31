@@ -13,11 +13,6 @@ def close_all_tabs(browser):
         return
 
     for tab in browser.list_tab():
-        try:
-            tab.stop()
-        except pychrome.RuntimeException:
-            pass
-
         browser.close_tab(tab)
 
     time.sleep(1)
