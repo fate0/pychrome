@@ -60,7 +60,6 @@ class Tab(object):
         self._cur_id = 1000
 
         self._ws = None
-        self._ws_send_lock = threading.Lock()
 
         self._recv_th = threading.Thread(target=self._recv_loop)
         self._recv_th.daemon = True
@@ -80,14 +79,13 @@ class Tab(object):
             self._cur_id += 1
             message['id'] = self._cur_id
 
-        self.method_results[message['id']] = queue.Queue()
         message_json = json.dumps(message)
 
         if self.debug:  # pragma: no cover
             print("SEND ► %s" % message_json)
 
-        with self._ws_send_lock:
-            self._ws.send(message_json)
+        # just raise the exception to user
+        self._ws.send(message_json)
 
         if not isinstance(timeout, (int, float)) or timeout > 1:
             q_timeout = 1
@@ -95,6 +93,8 @@ class Tab(object):
             q_timeout = timeout / 2.0
 
         try:
+            self.method_results[message['id']] = queue.Queue()
+
             while not self._stopped.is_set():
                 try:
                     if isinstance(timeout, (int, float)):
@@ -125,7 +125,10 @@ class Tab(object):
                 message = json.loads(message_json)
             except websocket.WebSocketTimeoutException:
                 continue
-            except (websocket.WebSocketConnectionClosedException, OSError):
+            except (websocket.WebSocketException, OSError):
+                if not self._stopped.is_set():
+                    logger.error("websocket exception", exc_info=True)
+                    self._stopped.set()
                 return
 
             if self.debug:  # pragma: no cover
@@ -227,7 +230,12 @@ class Tab(object):
         if not self._started:
             raise RuntimeException("Tab is not running")
 
-        return self._stopped.wait(timeout)
+        if timeout:
+            return self._stopped.wait(timeout)
+
+        self._recv_th.join()
+        self._handle_event_th.join()
+        return True
 
     def __str__(self):
         return "<Tab [%s]>" % self.id
