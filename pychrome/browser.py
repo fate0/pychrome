@@ -8,7 +8,7 @@ gevent.monkey.patch_socket()
 
 import requests
 
-from pychrome.tab import Tab
+from .tab import Tab
 
 
 __all__ = ["Browser"]

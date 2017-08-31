@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 import gevent.monkey
 gevent.monkey.patch_socket()
-gevent.monkey.patch_thread()
+#  gevent.monkey.patch_thread()
 
 import os
 import json
@@ -18,7 +18,7 @@ import gevent.event
 import gevent.queue
 import gevent.lock
 
-from pychrome.exceptions import *
+from .exceptions import *
 
 
 __all__ = ["Tab"]
