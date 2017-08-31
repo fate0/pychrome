@@ -3,22 +3,21 @@
 
 from __future__ import unicode_literals
 
-import gevent.monkey
-gevent.monkey.patch_socket()
-gevent.monkey.patch_thread()
-
 import os
 import json
 import logging
 import warnings
+import threading
 import functools
 
 import websocket
-import gevent.event
-import gevent.queue
-import gevent.lock
 
 from .exceptions import *
+
+try:
+    import Queue as queue
+except ImportError:
+    import queue
 
 
 __all__ = ["Tab"]
@@ -61,25 +60,27 @@ class Tab(object):
         self._cur_id = 1000
 
         self._ws = None
-        self._ws_send_lock = gevent.lock.RLock()
+        self._ws_send_lock = threading.Lock()
 
-        self._recv_gr = gevent.Greenlet(self._recv_loop)
-        self._handle_event_gr = gevent.Greenlet(self._handle_event_loop)
+        self._recv_th = threading.Thread(target=self._recv_loop)
+        self._recv_th.daemon = True
+        self._handle_event_th = threading.Thread(target=self._handle_event_loop)
+        self._handle_event_th.daemon = True
 
-        self._stopped = gevent.event.Event()
+        self._stopped = threading.Event()
         self._started = False
         self.status = self.status_initial
 
         self.event_handlers = {}
         self.method_results = {}
-        self.event_queue = gevent.queue.Queue()
+        self.event_queue = queue.Queue()
 
     def _send(self, message, timeout=None):
         if 'id' not in message:
             self._cur_id += 1
             message['id'] = self._cur_id
 
-        self.method_results[message['id']] = gevent.queue.Queue()
+        self.method_results[message['id']] = queue.Queue()
         message_json = json.dumps(message)
 
         if self.debug:  # pragma: no cover
@@ -103,7 +104,7 @@ class Tab(object):
                         timeout -= q_timeout
 
                     return self.method_results[message['id']].get(timeout=q_timeout)
-                except gevent.queue.Empty:
+                except queue.Empty:
                     if isinstance(timeout, (int, float)) and timeout <= 0:
                         raise TimeoutException("Calling %s timeout" % message['method'])
 
@@ -146,7 +147,7 @@ class Tab(object):
         while not self._stopped.is_set():
             try:
                 event = self.event_queue.get(timeout=1)
-            except gevent.queue.Empty:
+            except queue.Empty:
                 continue
 
             if event['method'] in self.event_handlers:
@@ -206,8 +207,8 @@ class Tab(object):
         self.status = self.status_started
         self._stopped.clear()
         self._ws = websocket.create_connection(self._websocket_url)
-        self._recv_gr.start()
-        self._handle_event_gr.start()
+        self._recv_th.start()
+        self._handle_event_th.start()
         return True
 
     def stop(self):

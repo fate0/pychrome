@@ -18,7 +18,6 @@ with open('pychrome/__init__.py', 'rb') as f:
 
 
 requirements = [
-    'gevent>=1.2.2',
     'click>=6.0',
     'websocket-client>=0.44.0',
     'requests>=2.13.0',

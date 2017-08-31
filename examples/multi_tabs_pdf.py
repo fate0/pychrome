@@ -4,7 +4,8 @@
 import time
 import base64
 import pychrome
-import gevent.lock
+
+import threading
 
 
 urls = [
@@ -16,7 +17,7 @@ urls = [
 
 
 class EventHandler(object):
-    screen_lock = gevent.lock.RLock()
+    pdf_lock = threading.Lock()
 
     def __init__(self, browser, tab):
         self.browser = browser
@@ -31,13 +32,14 @@ class EventHandler(object):
         if self.start_frame == frameId:
             self.tab.Page.stopLoading()
 
-            with self.screen_lock:
+            with self.pdf_lock:
                 # must activate current tab
                 print(self.browser.activate_tab(self.tab.id))
 
                 try:
-                    data = self.tab.Page.captureScreenshot()
-                    with open("%s.png" % time.time(), "wb") as fd:
+                    data = self.tab.Page.printToPDF()
+
+                    with open("%s.pdf" % time.time(), "wb") as fd:
                         fd.write(base64.b64decode(data['data']))
                 finally:
                     self.tab.stop()
@@ -81,7 +83,7 @@ def main():
     for tab in tabs:
         tab.wait(60)
         tab.stop()
-        browser.close_tab(tab)
+        browser.close_tab(tab.id)
 
     print('Done')
 
