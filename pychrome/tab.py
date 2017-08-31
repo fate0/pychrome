@@ -18,7 +18,7 @@ import gevent.event
 import gevent.queue
 import gevent.lock
 
-from pychrome.exceptions import *
+from .exceptions import *
 
 
 __all__ = ["Tab"]
