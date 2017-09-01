@@ -84,9 +84,6 @@ class Tab(object):
         if self.debug:  # pragma: no cover
             print("SEND ► %s" % message_json)
 
-        # just raise the exception to user
-        self._ws.send(message_json)
-
         if not isinstance(timeout, (int, float)) or timeout > 1:
             q_timeout = 1
         else:
@@ -94,6 +91,9 @@ class Tab(object):
 
         try:
             self.method_results[message['id']] = queue.Queue()
+
+            # just raise the exception to user
+            self._ws.send(message_json)
 
             while not self._stopped.is_set():
                 try:
@@ -203,7 +203,7 @@ class Tab(object):
         self._started = True
         self.status = self.status_started
         self._stopped.clear()
-        self._ws = websocket.create_connection(self._websocket_url)
+        self._ws = websocket.create_connection(self._websocket_url, enable_multithread=True)
         self._recv_th.start()
         self._handle_event_th.start()
         return True
