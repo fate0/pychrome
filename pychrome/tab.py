@@ -82,7 +82,7 @@ class Tab(object):
         message_json = json.dumps(message)
 
         if self.debug:  # pragma: no cover
-            print("SEND ► %s" % message_json)
+            print("SEND > %s" % message_json)
 
         if not isinstance(timeout, (int, float)) or timeout > 1:
             q_timeout = 1
@@ -129,7 +129,7 @@ class Tab(object):
                 return
 
             if self.debug:  # pragma: no cover
-                print('◀ RECV %s' % message_json)
+                print('< RECV %s' % message_json)
 
             if "method" in message:
                 self.event_queue.put(message)
