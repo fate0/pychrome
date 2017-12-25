@@ -217,7 +217,8 @@ class Tab(object):
 
         self.status = self.status_stopped
         self._stopped.set()
-        self._ws.close()
+        if self._ws:
+            self._ws.close()
         return True
 
     def wait(self, timeout=None):
