@@ -153,6 +153,8 @@ class Tab(object):
                 except Exception as e:
                     logger.error("callback %s exception" % event['method'], exc_info=True)
 
+            self.event_queue.task_done()
+
     def __getattr__(self, item):
         attr = GenericAttr(item, self)
         setattr(self, item, attr)
