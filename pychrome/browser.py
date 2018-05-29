@@ -7,6 +7,7 @@ import requests
 
 from .tab import Tab
 
+from .service import Service
 
 __all__ = ["Browser"]
 
