@@ -21,7 +21,9 @@ class Service(object):
     def __init__(self, executable = None, port=0, log_file=DEVNULL, env=None,
                  start_error_message="", service_args = None, headless = True):
         if not executable:
-            executable = which("chrome")
+            for chrome_exe in ["chrome", "google-chrome-stable"]
+                executable = which(chrome_exe)
+                if executable: break
             if not executable:
                 raise ChromeException("Could not find chrome executable in system path!")
         
