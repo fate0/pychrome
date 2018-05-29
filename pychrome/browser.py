@@ -14,7 +14,14 @@ __all__ = ["Browser"]
 class Browser(object):
     _all_tabs = {}
 
-    def __init__(self, url="http://127.0.0.1:9222"):
+    def __init__(self, url=None, *args, **kwargs):
+        self.service = None
+        if not url:
+            # Start headless chrome service. For visible chrome, call
+            # with Browser(headless=False)
+            self.service = Service(*args, **kwargs)
+            url = self.service.url
+
         self.dev_url = url
 
         if self.dev_url not in self._all_tabs:
