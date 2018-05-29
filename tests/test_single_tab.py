@@ -20,17 +20,17 @@ def close_all_tabs(browser):
 
 
 def setup_function(function):
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     close_all_tabs(browser)
 
 
 def teardown_function(function):
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     close_all_tabs(browser)
 
 
 def test_normal_callmethod():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     tab.start()
@@ -46,7 +46,7 @@ def test_normal_callmethod():
 
 
 def test_invalid_method():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     tab.start()
@@ -59,7 +59,7 @@ def test_invalid_method():
 
 
 def test_invalid_params():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     tab.start()
@@ -90,7 +90,7 @@ def test_invalid_params():
 
 
 def test_set_event_listener():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):
@@ -110,7 +110,7 @@ def test_set_event_listener():
 
 
 def test_set_wrong_listener():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     tab.start()
@@ -123,7 +123,7 @@ def test_set_wrong_listener():
 
 
 def test_get_event_listener():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):
@@ -151,7 +151,7 @@ def test_get_event_listener():
 
 
 def test_reuse_tab_error():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):
@@ -177,7 +177,7 @@ def test_reuse_tab_error():
 
 
 def test_del_event_listener():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
     test_list = []
 
@@ -199,7 +199,7 @@ def test_del_event_listener():
 
 
 def test_del_all_event_listener():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
     test_list = []
 
@@ -228,7 +228,7 @@ class CallableClass(object):
 
 
 def test_use_callable_class_event_listener():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     tab.start()
@@ -246,7 +246,7 @@ def test_use_callable_class_event_listener():
 
 
 def test_status():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     assert tab.status == pychrome.Tab.status_initial
@@ -275,7 +275,7 @@ def test_status():
 
 
 def test_call_method_timeout():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     tab.start()
@@ -295,7 +295,7 @@ def test_call_method_timeout():
 
 
 def test_callback_exception():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):
