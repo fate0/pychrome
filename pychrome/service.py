@@ -5,8 +5,12 @@ import subprocess
 from subprocess import PIPE
 import time
 import socket
-from shutil import which
 from tempfile import TemporaryDirectory
+
+try:
+    from shutil import which
+except ImportError:
+    from distutils.spawn import find_executable as which
 
 
 try:
