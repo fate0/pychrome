@@ -23,12 +23,12 @@ def close_all_tabs(browser):
 
 
 def setup_function(function):
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     close_all_tabs(browser)
 
 
 def teardown_function(function):
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     close_all_tabs(browser)
 
 
@@ -41,7 +41,7 @@ def new_multi_tabs(browser, n):
 
 
 def test_normal_callmethod():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tabs = new_multi_tabs(browser, 10)
 
     for tab in tabs:
@@ -59,7 +59,7 @@ def test_normal_callmethod():
 
 
 def test_set_event_listener():
-    browser = pychrome.Browser()
+    browser = pychrome.Browser(url="http://127.0.0.1:9222")
     tabs = new_multi_tabs(browser, 10)
 
     def request_will_be_sent(tab, **kwargs):
