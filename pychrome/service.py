@@ -5,13 +5,16 @@ import subprocess
 from subprocess import PIPE
 import time
 import socket
-from tempfile import TemporaryDirectory
 
 try:
     from shutil import which
 except ImportError:
     from distutils.spawn import find_executable as which
 
+try:
+    from tempfile import TemporaryDirectory
+except ImportError:
+    from .tempdir import TemporaryDirectory
 
 try:
     from subprocess import DEVNULL
