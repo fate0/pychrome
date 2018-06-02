@@ -8,15 +8,15 @@ class TemporaryDirectory(object):
     """
     def __init__(self):
         self.name = tempfile.mkdtemp()
-		
-	def __enter__(self):
-		return self
-		
-	def __del__(self):
-		self.cleanup()
-		
-	def __exit__(self):
+
+    def __enter__(self):
+        return self
+
+    def __del__(self):
         self.cleanup()
 		
-	def cleanup(self):
-		shutil.rmtree(self.name)
+    def __exit__(self):
+        self.cleanup()
+	
+    def cleanup(self):
+        shutil.rmtree(self.name)
