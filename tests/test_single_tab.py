@@ -3,34 +3,39 @@
 import time
 import logging
 import pychrome
+import pytest
 
 logging.basicConfig(level=logging.INFO)
 
 
+@pytest.fixture(scope='session')  # one server to rule'em all
+def browser():  
+    # A bug in Travis-CI's testing environment requires that chrome requires
+    # sudo access to set up the sandbox. Hence we turn it off.
+    # A regular environment  does not need these service args
+    service_args = ['--no-sandbox', '--disable-gpu']
+    
+    with pychrome.Browser(service_args=service_args) as browser:
+        yield browser
+        
+@pytest.fixture(autouse=True)
+def run_around_tests(browser):
+    # Code that will run before each test:
+    close_all_tabs(browser)
+    # Run test
+    yield
+	
 def close_all_tabs(browser):
     if len(browser.list_tab()) == 0:
         return
 
-    logging.debug("[*] recycle")
     for tab in browser.list_tab():
         browser.close_tab(tab)
 
     time.sleep(1)
     assert len(browser.list_tab()) == 0
 
-
-def setup_function(function):
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
-    close_all_tabs(browser)
-
-
-def teardown_function(function):
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
-    close_all_tabs(browser)
-
-
-def test_normal_callmethod():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_normal_callmethod(browser):
     tab = browser.new_tab()
 
     tab.start()
@@ -45,8 +50,7 @@ def test_normal_callmethod():
     tab.stop()
 
 
-def test_invalid_method():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_invalid_method(browser):
     tab = browser.new_tab()
 
     tab.start()
@@ -58,8 +62,7 @@ def test_invalid_method():
     tab.stop()
 
 
-def test_invalid_params():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_invalid_params(browser):
     tab = browser.new_tab()
 
     tab.start()
@@ -89,8 +92,7 @@ def test_invalid_params():
     tab.stop()
 
 
-def test_set_event_listener():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_set_event_listener(browser):
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):
@@ -109,8 +111,7 @@ def test_set_event_listener():
         assert False, "never get here"
 
 
-def test_set_wrong_listener():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_set_wrong_listener(browser):
     tab = browser.new_tab()
 
     tab.start()
@@ -122,8 +123,7 @@ def test_set_wrong_listener():
     tab.stop()
 
 
-def test_get_event_listener():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_get_event_listener(browser):
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):
@@ -150,8 +150,7 @@ def test_get_event_listener():
     tab.stop()
 
 
-def test_reuse_tab_error():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_reuse_tab_error(browser):
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):
@@ -176,8 +175,7 @@ def test_reuse_tab_error():
     tab.stop()
 
 
-def test_del_event_listener():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_del_event_listener(browser):
     tab = browser.new_tab()
     test_list = []
 
@@ -198,8 +196,7 @@ def test_del_event_listener():
     tab.stop()
 
 
-def test_del_all_event_listener():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_del_all_event_listener(browser):
     tab = browser.new_tab()
     test_list = []
 
@@ -227,8 +224,7 @@ class CallableClass(object):
         self.tab.stop()
 
 
-def test_use_callable_class_event_listener():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_use_callable_class_event_listener(browser):
     tab = browser.new_tab()
 
     tab.start()
@@ -245,8 +241,7 @@ def test_use_callable_class_event_listener():
     tab.stop()
 
 
-def test_status():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_status(browser):
     tab = browser.new_tab()
 
     assert tab.status == pychrome.Tab.status_initial
@@ -274,8 +269,7 @@ def test_status():
     assert tab.status == pychrome.Tab.status_stopped
 
 
-def test_call_method_timeout():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_call_method_timeout(browser):
     tab = browser.new_tab()
 
     tab.start()
@@ -294,8 +288,7 @@ def test_call_method_timeout():
     tab.stop()
 
 
-def test_callback_exception():
-    browser = pychrome.Browser(url="http://127.0.0.1:9222")
+def test_callback_exception(browser):
     tab = browser.new_tab()
 
     def request_will_be_sent(**kwargs):

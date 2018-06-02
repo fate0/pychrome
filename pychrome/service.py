@@ -16,23 +16,15 @@ try:
 except ImportError:
     from .tempdir import TemporaryDirectory
 
-try:
-    from subprocess import DEVNULL
-    _HAS_NATIVE_DEVNULL = True
-except ImportError:
-    DEVNULL = -3
-    _HAS_NATIVE_DEVNULL = False
-
 class Service(object):
 
-    def __init__(self, executable = None, port=0, log_file=DEVNULL, env=None,
+    def __init__(self, executable = None, port=0, env=None,
                  start_error_message="", service_args = None, headless = True):
         if not executable:
             for chrome_exe in ["chrome", "google-chrome-stable"]:
                 executable = which(chrome_exe)
                 if executable: break
-            if not executable:
-                raise ChromeException("Could not find chrome executable in system path!")
+
         
         self.path = executable
         
@@ -43,29 +35,26 @@ class Service(object):
             self.port = free_port()
         
         self.service_args = service_args or []
-        self.service_args += ['--disable-background-networking',
-                              '--disable-client-side-phishing-detection',
-                              '--disable-default-apps', '--disable-hang-monitor',
-                              '--disable-infobars', '--disable-popup-blocking',
-                              '--disable-prompt-on-repost', '--disable-sync',
-                              '--disable-web-resources', '--enable-automation',
-                              '--enable-logging', '--password-store=basic',
-                              '--force-fieldtrials=SiteIsolationExtensions/Control',
-                              '--ignore-certificate-errors', '--log-level=0',
-                              '--metrics-recording-only', '--no-first-run',
-                              '--test-type=browser', '--use-mock-keychain']
-        self.service_args += ['--user-data-dir='  + self.tmpdir.name]
+        # These are the service arguments used by Google's own WebDriver implementation:
+        if len(self.service_args) == 0:
+            self.service_args += ['--disable-background-networking',
+                                  '--disable-client-side-phishing-detection',
+                                  '--disable-default-apps', '--disable-hang-monitor',
+                                  '--disable-infobars', '--disable-popup-blocking',
+                                  '--disable-prompt-on-repost', '--disable-sync',
+                                  '--disable-web-resources', '--enable-automation',
+                                  '--enable-logging', '--password-store=basic',
+                                  '--force-fieldtrials=SiteIsolationExtensions/Control',
+                                  '--ignore-certificate-errors', '--log-level=0',
+                                  '--metrics-recording-only', '--no-first-run',
+                                  '--test-type=browser', '--use-mock-keychain',
+                                  '--user-data-dir='  + self.tmpdir.name]
+            
         self.service_args += ['--remote-debugging-port=' + str(self.port)]
         self.service_args += ['--headless'] if headless else []
 
-        if not _HAS_NATIVE_DEVNULL and log_file == DEVNULL:
-            log_file = open(os.devnull, 'wb')
-
         self.start_error_message = start_error_message
-        self.log_file = log_file
         self.env = env or os.environ
-        
-        self.tmpdir = TemporaryDirectory()
         
         self.start()
 
@@ -89,8 +78,8 @@ class Service(object):
             cmd.extend(self.service_args)
             self.process = subprocess.Popen(cmd, env=self.env,
                                             close_fds=platform.system() != 'Windows',
-                                            stdout=self.log_file,
-                                            stderr=self.log_file,
+                                            stdout=PIPE,
+                                            stderr=PIPE,
                                             stdin=PIPE)
         except TypeError:
             raise
@@ -124,6 +113,9 @@ class Service(object):
     def assert_process_still_running(self):
         return_code = self.process.poll()
         if return_code is not None:
+            outs, errs = self.process.communicate(timeout=15)
+            print("\nChrome STDOUT:\n" + outs.encode() + "\n\n")
+            print("\nChrome STDERR:\n" + errs.encode() + "\n\n")
             raise ChromeException(
                 'Service %s unexpectedly exited. Status code was: %s'
                 % (self.path, return_code)
@@ -136,11 +128,6 @@ class Service(object):
         """
         Stops the service.
         """
-        if self.log_file != PIPE and not (self.log_file == DEVNULL and _HAS_NATIVE_DEVNULL):
-            try:
-                self.log_file.close()
-            except Exception:
-                pass
 
         if self.process is None:
             return
