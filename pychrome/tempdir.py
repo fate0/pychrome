@@ -1,4 +1,3 @@
-from tempfile
 import shutil
 import tempfile
 
