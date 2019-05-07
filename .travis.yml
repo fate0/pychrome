@@ -13,10 +13,7 @@ matrix:
 
 addons:
   chrome: stable
-before_install:
-  - # start your web application and listen on `localhost`
-  - google-chrome-stable --headless --no-sandbox --disable-gpu --remote-debugging-port=9222 http://localhost &
-
+  
 install:
   - pip install -r requirements_dev.txt
   - python setup.py install

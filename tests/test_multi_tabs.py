@@ -4,17 +4,33 @@ import time
 import logging
 import pychrome
 import functools
+import pytest
 
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 
-
+@pytest.fixture(scope='session')  # one server to rule'em all
+def browser():  
+    # A bug in Travis-CI's testing environment requires that chrome requires
+    # sudo access to set up the sandbox. Hence we turn it off.
+    # A regular environment  does not need these service args
+    service_args = ['--no-sandbox', '--disable-gpu']
+    
+    with pychrome.Browser(service_args=service_args) as browser:
+        yield browser
+        
+@pytest.fixture(autouse=True)
+def run_around_tests(browser):
+    # Code that will run before each test:
+    close_all_tabs(browser)
+    # Run test
+    yield
+	
 def close_all_tabs(browser):
     if len(browser.list_tab()) == 0:
         return
 
-    logging.debug("[*] recycle")
     for tab in browser.list_tab():
         browser.close_tab(tab)
 
@@ -22,26 +38,15 @@ def close_all_tabs(browser):
     assert len(browser.list_tab()) == 0
 
 
-def setup_function(function):
-    browser = pychrome.Browser()
-    close_all_tabs(browser)
-
-
-def teardown_function(function):
-    browser = pychrome.Browser()
-    close_all_tabs(browser)
-
-
-def new_multi_tabs(browser, n):
+def new_multi_tabs(b, n):
     tabs = []
     for i in range(n):
-        tabs.append(browser.new_tab())
+        tabs.append(b.new_tab())
 
     return tabs
 
 
-def test_normal_callmethod():
-    browser = pychrome.Browser()
+def test_normal_callmethod(browser):
     tabs = new_multi_tabs(browser, 10)
 
     for tab in tabs:
@@ -58,8 +63,7 @@ def test_normal_callmethod():
         tab.stop()
 
 
-def test_set_event_listener():
-    browser = pychrome.Browser()
+def test_set_event_listener(browser):
     tabs = new_multi_tabs(browser, 10)
 
     def request_will_be_sent(tab, **kwargs):
