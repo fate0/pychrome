@@ -24,7 +24,7 @@ class Browser(object):
 
     def new_tab(self, url=None, timeout=None):
         url = url or ''
-        rp = requests.get("%s/json/new?%s" % (self.dev_url, url), json=True, timeout=timeout)
+        rp = requests.put("%s/json/new?%s" % (self.dev_url, url), json=True, timeout=timeout)
         tab = Tab(**rp.json())
         self._tabs[tab.id] = tab
         return tab
