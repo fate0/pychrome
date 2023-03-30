@@ -205,7 +205,7 @@ class Tab(object):
         self._started = True
         self.status = self.status_started
         self._stopped.clear()
-        self._ws = websocket.create_connection(self._websocket_url, enable_multithread=True)
+        self._ws = websocket.create_connection(self._websocket_url, enable_multithread=True, suppress_origin=True)
         self._recv_th.start()
         self._handle_event_th.start()
         return True
