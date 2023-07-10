@@ -28,6 +28,7 @@ setup(
     version=version,
     description="A Python Package for the Google Chrome Dev Protocol",
     long_description=readme,
+    long_description_content_type="text/markdown",
     author="fate0",
     author_email='fate0@fatezero.org',
     url='https://github.com/fate0/pychrome',
