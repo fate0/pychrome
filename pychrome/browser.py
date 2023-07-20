@@ -7,6 +7,7 @@ import requests
 
 from .tab import Tab
 
+from .service import Service
 
 __all__ = ["Browser"]
 
@@ -14,7 +15,14 @@ __all__ = ["Browser"]
 class Browser(object):
     _all_tabs = {}
 
-    def __init__(self, url="http://127.0.0.1:9222"):
+    def __init__(self, url=None, *args, **kwargs):
+        self.service = None
+        if not url:
+            # Start headless chrome service. For visible chrome, call
+            # with Browser(headless=False)
+            self.service = Service(*args, **kwargs)
+            url = self.service.url
+
         self.dev_url = url
 
         if self.dev_url not in self._all_tabs:
@@ -65,6 +73,13 @@ class Browser(object):
     def version(self, timeout=None):
         rp = requests.get("%s/json/version" % self.dev_url, json=True, timeout=timeout)
         return rp.json()
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, *args):
+        if self.service:
+            self.service.__exit__()
 
     def __str__(self):
         return '<Browser %s>' % self.dev_url
