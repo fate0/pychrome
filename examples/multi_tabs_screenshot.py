@@ -44,10 +44,10 @@ class EventHandler(object):
 
 
 def close_all_tabs(browser):
-    if len(browser.list_tab()) == 0:
+    if len(browser.list_tab()) <= 1:
         return
 
-    for tab in browser.list_tab():
+    for tab in browser.list_tab()[1:]:
         try:
             tab.stop()
         except pychrome.RuntimeException:
@@ -56,7 +56,7 @@ def close_all_tabs(browser):
         browser.close_tab(tab)
 
     time.sleep(1)
-    assert len(browser.list_tab()) == 0
+    assert len(browser.list_tab()) == 1
 
 
 def main():

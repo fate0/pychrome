@@ -119,9 +119,14 @@ class Tab(object):
             try:
                 self._ws.settimeout(1)
                 message_json = self._ws.recv()
+                if message_json == '':
+                    continue
                 message = json.loads(message_json)
             except websocket.WebSocketTimeoutException:
                 continue
+            except json.decoder.JSONDecodeError:  # '' and another
+                logger.error("invalid json", exc_info=True)
+                return
             except (websocket.WebSocketException, OSError):
                 if not self._stopped.is_set():
                     logger.error("websocket exception", exc_info=True)

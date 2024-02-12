@@ -11,15 +11,15 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
 def close_all_tabs(browser):
-    if len(browser.list_tab()) == 0:
+    if len(browser.list_tab()) <= 1:
         return
 
     logging.debug("[*] recycle")
-    for tab in browser.list_tab():
+    for tab in browser.list_tab()[1:]:
         browser.close_tab(tab)
 
     time.sleep(1)
-    assert len(browser.list_tab()) == 0
+    assert len(browser.list_tab()) == 1
 
 
 def setup_function(function):
@@ -46,7 +46,7 @@ def test_normal_callmethod():
 
     for tab in tabs:
         tab.start()
-        result = tab.Page.navigate(url="http://www.fatezero.org")
+        result = tab.Page.navigate(url="https://github.com/fate0")
         assert result['frameId']
 
     time.sleep(3)
@@ -54,7 +54,7 @@ def test_normal_callmethod():
     for tab in tabs:
         result = tab.Runtime.evaluate(expression="document.domain")
         assert result['result']['type'] == 'string'
-        assert result['result']['value'] == 'www.fatezero.org'
+        assert result['result']['value'] == 'github.com'
         tab.stop()
 
 

@@ -15,6 +15,7 @@ class ChromiumClient(object):
 
         event_handler = EventHandler()
 
+        event_handler.set_tab(self.tab)
         event_handler.set_token('asdkflj497564dsklf')
         event_handler.set_post_data({
             'param1': 'value1',
@@ -22,11 +23,9 @@ class ChromiumClient(object):
         })
 
         url_pattern_object = {'urlPattern': '*fate0*'}
-        self.tab.Network.setRequestInterception(patterns=[url_pattern_object])
-
-        self.tab.Network.requestIntercepted = event_handler.on_request_intercepted
-
         self.tab.start()
+        self.tab.Network.requestIntercepted = event_handler.on_request_intercepted
+        self.tab.Network.setRequestInterception(patterns=[url_pattern_object])
 
         self.tab.Network.enable()
         self.tab.Page.enable()
@@ -43,7 +42,7 @@ class EventHandler(object):
     def __init__(self):
         self.tab = None
         self.token = None
-        self.is_first_request = False
+        self.is_first_request = True
         self.post_data = {}
 
     def set_tab(self, t):
@@ -75,7 +74,7 @@ class EventHandler(object):
                 'url': request['url'],
                 'method': 'POST',
                 'headers': request['headers'],
-                'postData': urllib.urlencode(self.post_data)
+                'postData': urllib.parse.urlencode(self.post_data)
             })
 
         self.tab.Network.continueInterceptedRequest(**new_args)

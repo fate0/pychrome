@@ -8,15 +8,15 @@ logging.basicConfig(level=logging.INFO)
 
 
 def close_all_tabs(browser):
-    if len(browser.list_tab()) == 0:
+    if len(browser.list_tab()) <= 1:
         return
 
     logging.debug("[*] recycle")
-    for tab in browser.list_tab():
+    for tab in browser.list_tab()[1:]:
         browser.close_tab(tab)
 
     time.sleep(1)
-    assert len(browser.list_tab()) == 0
+    assert len(browser.list_tab()) == 1
 
 
 def setup_function(function):
@@ -34,14 +34,14 @@ def test_normal_callmethod():
     tab = browser.new_tab()
 
     tab.start()
-    result = tab.Page.navigate(url="http://www.fatezero.org")
+    result = tab.Page.navigate(url="https://github.com/fate0")
     assert result['frameId']
 
     time.sleep(1)
     result = tab.Runtime.evaluate(expression="document.domain")
 
     assert result['result']['type'] == 'string'
-    assert result['result']['value'] == 'www.fatezero.org'
+    assert result['result']['value'] == 'github.com'
     tab.stop()
 
 
@@ -70,19 +70,19 @@ def test_invalid_params():
         pass
 
     try:
-        tab.Page.navigate("http://www.fatezero.org")
+        tab.Page.navigate("https://github.com/fate0")
         assert False, "never get here"
     except pychrome.CallMethodException:
         pass
 
     try:
-        tab.Page.navigate(invalid_params="http://www.fatezero.org")
+        tab.Page.navigate(invalid_params="https://github.com/fate0")
         assert False, "never get here"
     except pychrome.CallMethodException:
         pass
 
     try:
-        tab.Page.navigate(url="http://www.fatezero.org", invalid_params=123)
+        tab.Page.navigate(url="https://github.com/fate0", invalid_params=123)
     except pychrome.CallMethodException:
         assert False, "never get here"
 
@@ -169,7 +169,7 @@ def test_reuse_tab_error():
         assert False, "never get here"
 
     try:
-        tab.Page.navigate(url="http://www.fatezero.org")
+        tab.Page.navigate(url="https://github.com/fate0")
         assert False, "never get here"
     except pychrome.RuntimeException:
         pass
@@ -189,7 +189,7 @@ def test_del_event_listener():
     tab.Network.requestWillBeSent = request_will_be_sent
     tab.Network.enable()
     tab.Page.navigate(url="chrome://newtab/")
-    tab.Page.navigate(url="http://www.fatezero.org")
+    tab.Page.navigate(url="https://github.com/fate0")
 
     if tab.wait(timeout=5):
         assert False, "never get here"
@@ -282,12 +282,12 @@ def test_call_method_timeout():
     tab.Page.navigate(url="chrome://newtab/", _timeout=5)
 
     try:
-        tab.Page.navigate(url="http://www.fatezero.org", _timeout=0.8)
+        tab.Page.navigate(url="https://github.com/fate0", _timeout=0.8)
     except pychrome.TimeoutException:
         pass
 
     try:
-        tab.Page.navigate(url="http://www.fatezero.org", _timeout=0.005)
+        tab.Page.navigate(url="https://github.com/fate0", _timeout=0.005)
     except pychrome.TimeoutException:
         pass
 
